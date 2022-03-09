@@ -1,5 +1,4 @@
-# Grupo-1.6
-Agricultura Familiar
+# Grupo 6 - Agricultura Familiar
 
 1. Daniel Espindola da Silva
 1. João pedro genga Carneiro
