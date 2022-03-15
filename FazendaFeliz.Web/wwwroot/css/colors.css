@@ -1,0 +1,14 @@
+﻿/* -------------------------------- [COLORS] -------------------------------- */
+:root {
+    /*colors*/
+    --clr-green: #59981A;
+    --clr-yellow-green: #ECF87F;
+    --clr-lime-green: #81b622;
+    --clr-olive-green: #3D550C;
+    --clr-forest-green: #013A20;
+    --clr-emerald-green: #478c5c;
+    --clr-lint-green: #BACC81;
+    --clr-lint-green-2: #CDD193;
+    --clr-red: #F45A5A;
+    --clr-orange: #FD9C00;
+}
