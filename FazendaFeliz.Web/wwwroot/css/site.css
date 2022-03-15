@@ -1,18 +1,44 @@
-html {
-  font-size: 14px;
+﻿
+.btn {
+    font-weight: bold;
+    width: 220px;
+    padding: 5px 15px;
+    border-radius: 20px;
+    transition: .3s ease;
+    color: white;
+    display: block;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.btn:hover {
+    transform: scale(1.02);
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.btn-green {
+    background: var(--clr-green);
+    color: white;
 }
 
-body {
-  margin-bottom: 60px;
+    .btn-green:hover {
+        background: var(--clr-lime-green);
+        color: white;
+    }
+
+.btn-orange {
+    background: var(--clr-orange);
+    color: white;
 }
+
+    .btn-orange:hover {
+        background: #F49C00bb;
+        color: white;
+    }
+
+.btn-red {
+    background: var(--clr-red);
+    color: white;
+}
+
+    .btn-red:hover {
+        background: #F45A5Add;
+        color: white;
+    }
