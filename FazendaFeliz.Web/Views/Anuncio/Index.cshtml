@@ -1,0 +1,122 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div>
+    <h3 class="page-title pb-2">Meus Anúncios</h3>
+
+    <div class="anuncios-wrapper row">
+        <section class="col-12 col-lg-4 px-2">
+            <div class="anuncio">
+                <h4>Brócolis</h4>
+                <div class="_card-body">
+                    <div class="info">
+                        <div>
+                            <label><i class="fa-solid fa-location-dot mr-2"></i>Localização</label>
+                            <p>Taguatinga, Feira do amanhã</p>
+                        </div>
+                        <div>
+                            <label><i class="fa-solid fa-money-bill-1-wave mr-2"></i>Preço</label>
+                            <p>R$ 22,00</p>
+                        </div>
+                    </div>
+                    <img src="~/img/images/brocolis.jpg"/>
+                </div>
+                <div class="edit-anuncio">
+                    <i class="fa-solid fa-pencil mr-2" onclick="editarAnuncio(44)"></i>
+                    <i class="fa-solid fa-eye-slash mr-2" onclick="ocultarAnuncio(34)"></i>
+                    <i class="fa-solid fa-trash-can" onclick="excluirAnuncio(23)"></i>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<style>
+    .mr-2 {
+        margin-right: 10px;
+    }
+    .anuncio {
+        border-radius: 10px;
+        border: solid 2px var(--clr-green);
+        padding: 1rem;
+        box-shadow: 0 0 5px 3px #0002;
+        margin: 1rem 0;
+        position: relative;
+    }
+
+    .edit-anuncio{
+        position: absolute;
+        right: 10px;
+        top: -30px;
+        background: var(--clr-yellow-green);
+        color: var(--clr-green);
+        padding: 2px 5px;
+    }
+
+    .edit-anuncio i{
+        cursor: pointer;
+    }
+
+    .anuncio h4 {
+        font-weight:bold;
+        text-align: center;
+    }
+
+    .info label{
+        font-weight: bold;
+    }
+
+    img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin: auto 0;
+    }
+
+    ._card-body {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+
+<script>
+    const editarAnuncio = (idAnuncio) => {
+        window.location.href = "/editar/"+idAnuncio;
+    }
+
+    const ocultarAnuncio = (idAnuncio) => {
+        axios({ method: 'post', url: '/anuncio/ocultar', data: parseInt(idAnuncio), headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }})
+        .then(function (response) {
+            if(response.status == 200) {
+                toastr.success("Anúncio ocultado com sucesso!");
+                window.location.reload();
+            }
+            console.log(response);
+        })
+        .catch(function (error) {
+            toastr.error("Erro ao ocultar anúncio");
+            console.log(error);
+        });
+    }
+
+    const excluirAnuncio = (idAnuncio) => {
+        axios({ method: 'post', url: '/anuncio/excluir', data: parseInt(idAnuncio), headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }})
+        .then(function (response) {
+            if(response.status == 200) {
+                toastr.success("Anúncio excluido com sucesso!");
+                window.location.reload();
+            }
+            console.log(response);
+        })
+        .catch(function (error) {
+            toastr.error("Erro ao ocultar anúncio");
+            console.log(error);
+        });
+    }
+</script>
