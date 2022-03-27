@@ -127,10 +127,10 @@
         axios.post('', 
           {
             titulo: form.titulo.value,
-            localizacao: form.titulo.value,
-            categoria: form.titulo.value,
-            preco: form.titulo.value,
-            descricao: form.titulo.value,
+            localizacao: form.localizacao.value,
+            categoria: form.categoria.value,
+            preco: Number(form.preco.value),
+            descricao: form.descricao.value,
             imagem_base64: form.imagem_base64
           })
         .then(function (response) {

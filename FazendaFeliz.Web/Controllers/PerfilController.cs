@@ -6,22 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using FazendaFeliz.Web.Data;
 using FazendaFeliz.Web.Models;
 
 namespace FazendaFeliz.Web.Controllers
 {
     public class PerfilController : Controller
     {
-        private readonly ApplicationDbContext _context;
-
-        public PerfilController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         // GET: Perfil
-        public async Task<IActionResult> Index()
+        /*public async Task<IActionResult> Index()
         {
             return View(await _context.Perfil.ToListAsync());
         }
@@ -149,6 +141,6 @@ namespace FazendaFeliz.Web.Controllers
         private bool PerfilExists(int id)
         {
             return _context.Perfil.Any(e => e.Id == id);
-        }
+        }*/
     }
 }

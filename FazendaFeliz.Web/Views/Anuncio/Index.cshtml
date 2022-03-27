@@ -1,34 +1,38 @@
-﻿@{
+﻿@model List<FazendaFeliz.ApplicationCore.Business.Anuncio>; 
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div>
     <h3 class="page-title pb-2">Meus Anúncios</h3>
-
     <div class="anuncios-wrapper row">
-        <section class="col-12 col-lg-4 px-2">
-            <div class="anuncio">
-                <h4>Brócolis</h4>
-                <div class="_card-body">
-                    <div class="info">
-                        <div>
-                            <label><i class="fa-solid fa-location-dot mr-2"></i>Localização</label>
-                            <p>Taguatinga, Feira do amanhã</p>
+    @foreach(var anuncio in Model)
+    {
+            <section class="col-12 col-lg-4 px-2">
+                <div class="anuncio">
+                    <h4>@anuncio.Titulo</h4>
+                    <div class="_card-body">
+                        <div class="info">
+                            <div>
+                                <label><i class="fa-solid fa-location-dot mr-2"></i>Localização</label>
+                                <p>@anuncio.Localizacao</p>
+                            </div>
+                            <div>
+                                <label><i class="fa-solid fa-money-bill-1-wave mr-2"></i>Preço</label>
+                                <p>@anuncio.Preco</p>
+                            </div>
                         </div>
-                        <div>
-                            <label><i class="fa-solid fa-money-bill-1-wave mr-2"></i>Preço</label>
-                            <p>R$ 22,00</p>
-                        </div>
+                        <img src="@anuncio.Imagem_Base64"/>
                     </div>
-                    <img src="~/img/images/brocolis.jpg"/>
+                    <div class="edit-anuncio">
+                        <i class="fa-solid fa-pencil mr-2" onclick="editarAnuncio(@anuncio.Id)"></i>
+                        <i class="fa-solid fa-eye-slash mr-2" onclick="ocultarAnuncio(@anuncio.Id)"></i>
+                        <i class="fa-solid fa-trash-can" onclick="excluirAnuncio(@anuncio.Id)"></i>
+                    </div>
                 </div>
-                <div class="edit-anuncio">
-                    <i class="fa-solid fa-pencil mr-2" onclick="editarAnuncio(44)"></i>
-                    <i class="fa-solid fa-eye-slash mr-2" onclick="ocultarAnuncio(34)"></i>
-                    <i class="fa-solid fa-trash-can" onclick="excluirAnuncio(23)"></i>
-                </div>
-            </div>
-        </section>
+            </section>
+    }
     </div>
 </div>
 

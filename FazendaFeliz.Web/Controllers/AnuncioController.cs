@@ -1,5 +1,8 @@
-﻿using FazendaFeliz.Web.Models;
+﻿using FazendaFeliz.ApplicationCore.Business;
+using FazendaFeliz.ApplicationCore.Interfaces.Repository;
+using FazendaFeliz.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace FazendaFeliz.Web.Controllers
@@ -7,18 +10,21 @@ namespace FazendaFeliz.Web.Controllers
     [Route("anuncio")]
     public class AnuncioController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        public readonly IUsuarioRepository _usuarioRepository;
+        public readonly IAnuncioRepository _anuncioRepository;
 
-        public AnuncioController(ILogger<HomeController> logger)
+        public AnuncioController(IUsuarioRepository usuarioRepository, IAnuncioRepository anuncioRepository)
         {
-            _logger = logger;
+            _usuarioRepository = usuarioRepository;
+            _anuncioRepository = anuncioRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewData["TipoUsuario"] = "Produtor";
             //PEGA OS MEUS ANUNCIOS DO BANCO E PASSA PRA VIEW
-            return View();
+            var anuncios = await _anuncioRepository.ObterTodos();
+            return View(anuncios);
         }
 
         [HttpGet("criar")]
@@ -44,17 +50,20 @@ namespace FazendaFeliz.Web.Controllers
         }
 
         [HttpPost("excluir")]
-        public IActionResult ExcluirAnuncio([FromBody]int idAnuncio)
+        public async Task<IActionResult> ExcluirAnuncio([FromBody]int idAnuncio)
         {
             //OBTER O ANUNCIO DO BANCO E CARREGAR NA PÁGINA
-            return View();
+            var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
+            await _anuncioRepository.Remover(anuncio);
+            return Json(1);
         }
 
         [HttpPost("criar")]
-        public IActionResult CriarAnuncio([FromBody] CadastroAnuncioModel anuncioData)
+        public async Task<IActionResult> CriarAnuncio([FromBody] Anuncio anuncioData)
         {
-            //INSERIR NO BANCO
-            //RETORNAR O ID DO ANUNCIO
+            _anuncioRepository.Add(anuncioData);
+            await _anuncioRepository.SaveChanges();
+
             return Json(1);
         }
     }

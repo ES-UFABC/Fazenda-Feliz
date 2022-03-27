@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FazendaFeliz", "FazendaFeliz.Web\FazendaFeliz.Web.csproj", "{7C562E2D-4E69-494F-8D0B-3D4B95F115E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FazendaFeliz.Web", "FazendaFeliz.Web\FazendaFeliz.Web.csproj", "{7C562E2D-4E69-494F-8D0B-3D4B95F115E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FazendaFeliz.Infrastructure", "FazendaFeliz.Infrastructure\FazendaFeliz.Infrastructure.csproj", "{67CD9594-2396-4A06-9186-16D26B34EA8B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FazendaFeliz.ApplicationCore", "FazendaFeliz.ApplicationCore\FazendaFeliz.ApplicationCore.csproj", "{6CAEC5CC-C01E-4653-B741-212544692393}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{7C562E2D-4E69-494F-8D0B-3D4B95F115E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C562E2D-4E69-494F-8D0B-3D4B95F115E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C562E2D-4E69-494F-8D0B-3D4B95F115E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67CD9594-2396-4A06-9186-16D26B34EA8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67CD9594-2396-4A06-9186-16D26B34EA8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67CD9594-2396-4A06-9186-16D26B34EA8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67CD9594-2396-4A06-9186-16D26B34EA8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CAEC5CC-C01E-4653-B741-212544692393}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CAEC5CC-C01E-4653-B741-212544692393}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CAEC5CC-C01E-4653-B741-212544692393}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CAEC5CC-C01E-4653-B741-212544692393}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
