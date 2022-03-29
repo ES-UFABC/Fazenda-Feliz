@@ -35,18 +35,30 @@ namespace FazendaFeliz.Web.Controllers
         }
 
         [HttpGet("editar/{idAnuncio}")]
-        public IActionResult EditarAnuncio(int idAnuncio)
+        public async Task<IActionResult> EditarAnuncio(int idAnuncio)
         {
             ViewData["TipoUsuario"] = "Produtor";
             //OBTER O ANUNCIO DO BANCO E CARREGAR NA PÁGINA
-            return View();
+            //puxo meu anuncio do BD pelo id
+            var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
+            
+            return View("EditarAnuncio", anuncio);
         }
 
         [HttpPost("ocultar")]
-        public IActionResult OcultarAnuncio([FromBody]int idAnuncio)
+        public async Task<IActionResult> OcultarAnuncio([FromBody]int idAnuncio)
         {
             //OBTER O ANUNCIO DO BANCO E CARREGAR NA PÁGINA
-            return View();
+            var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
+
+            if (anuncio.Oculto == false)
+                anuncio.Oculto = true;
+            else anuncio.Oculto = false;
+
+            await _anuncioRepository.SaveChanges();
+
+            //return View();
+            return Json(1);
         }
 
         [HttpPost("excluir")]
@@ -61,7 +73,19 @@ namespace FazendaFeliz.Web.Controllers
         [HttpPost("criar")]
         public async Task<IActionResult> CriarAnuncio([FromBody] Anuncio anuncioData)
         {
-            _anuncioRepository.Add(anuncioData);
+            if (anuncioData.Id == 0) {//se o anuncio for novo
+                _anuncioRepository.Add(anuncioData);
+            }
+            else{//anuncio antigo sendo editado
+                var anuncio = await _anuncioRepository.ObterPorId(anuncioData.Id);
+                anuncio.Titulo      = anuncioData.Titulo;
+                anuncio.Localizacao = anuncioData.Localizacao;
+                anuncio.Categoria   = anuncioData.Categoria;
+                anuncio.Preco       = anuncioData.Preco;
+                anuncio.Descricao   = anuncioData.Descricao;
+                anuncio.Imagem_Base64 = anuncioData.Imagem_Base64;
+            }
+            
             await _anuncioRepository.SaveChanges();
 
             return Json(1);

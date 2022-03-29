@@ -1,4 +1,5 @@
-﻿@{
+﻿@model FazendaFeliz.ApplicationCore.Business.Anuncio; 
+@{
     ViewData["Title"] = "Criar Anúncio";
 }
 
@@ -6,23 +7,22 @@
     <h3 class="page-title">Criar Anúncio</h3>
     <label id="anexador" for="img_anuncio">
         <input id="img_anuncio" hidden type="file" multiple="false" accept="image/*" onchange="loadImage(this);"/>
-        <i id="imgIcon" class="fas fa-camera-alt"></i>
-        <img id="uploadedImg" src="" style=display:none;/>
+        <img id="uploadedImg" src="@Model.Imagem_Base64"/>
     </label>
 
     <form>
         <div class="form-group">
             <label for="titulo">Titulo</label>
-            <input type="text" class="form-control" id="titulo" placeholder="">
+            <input type="text" class="form-control" id="titulo" value="@Model.Titulo" placeholder="">
         </div>
         <div class="form-group">
             <label for="localizacao">Localização</label>
-            <input type="text" class="form-control" id="localizacao" placeholder="">
+            <input type="text" class="form-control" id="localizacao" value="@Model.Localizacao" placeholder="">
         </div>
         <div class="form-group">
             <label for="categoria">Categoria</label>
             <select class="form-control" id="categoria" placeholder="">
-                <option value="">- Selecione -</option>
+                <option selected value="@Model.Categoria"> @Model.Categoria </option>
                 <option value="Artesanato">Artesanato</option>
                 <option value="Açúcar">Açúcar</option>
                 <option value="Bebidas">Bebidas</option>
@@ -52,11 +52,11 @@
         </div>
         <div class="form-group">
             <label for="preco">Preço</label>
-            <input type="number" class="form-control" id="preco" placeholder="">
+            <input type="number" class="form-control" id="preco" value="@Model.Preco.ToString().Replace(",", ".")" placeholder="">
         </div>
         <div class="form-group">
             <label for="descricao">Descrição</label>
-            <textarea class="form-control" id="descricao" placeholder="" rows=4></textarea>
+            <textarea class="form-control" id="descricao" placeholder="" rows=4>@Model.Descricao</textarea>
         </div>
         <button type="button" class="btn btn-orange my-2 mx-auto mb-4" onclick="salvarAnuncio();">SALVAR</button>
     </form>
@@ -102,7 +102,7 @@
         categoria: document.getElementById('categoria'),
         preco: document.getElementById('preco'),
         descricao: document.getElementById('descricao'),
-        imagem_base64: "",
+        imagem_base64: "@Html.Raw(@Model.Imagem_Base64)",
     }
 
     const salvarAnuncio = () => {
@@ -124,8 +124,9 @@
         if(form.imagem_base64 == "")
             return toastr.error("Por favor cadastrar uma imagem no anúncio");
 
-        axios.post('', 
+        axios.post('/anuncio/criar', 
           {
+            id: parseInt(@Html.Raw(Model.Id)),
             titulo: form.titulo.value,
             localizacao: form.localizacao.value,
             categoria: form.categoria.value,
