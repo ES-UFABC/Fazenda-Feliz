@@ -1,0 +1,157 @@
+﻿@{
+    ViewData["Title"] = "Criar Anúncio";
+}
+
+<div>
+    <h3 class="page-title">Criar Anúncio</h3>
+    <label id="anexador" for="img_anuncio">
+        <input id="img_anuncio" hidden type="file" multiple="false" accept="image/*" onchange="loadImage(this);"/>
+        <i id="imgIcon" class="fas fa-camera-alt"></i>
+        <img id="uploadedImg" src="" style=display:none;/>
+    </label>
+
+    <form>
+        <div class="form-group">
+            <label for="titulo">Titulo</label>
+            <input type="text" class="form-control" id="titulo" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="localizacao">Localização</label>
+            <input type="text" class="form-control" id="localizacao" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="categoria">Categoria</label>
+            <select class="form-control" id="categoria" placeholder="">
+                <option value="">- Selecione -</option>
+                <option value="Artesanato">Artesanato</option>
+                <option value="Açúcar">Açúcar</option>
+                <option value="Bebidas">Bebidas</option>
+                <option value="Café">Café</option>
+                <option value="Carnes">Carnes</option>
+                <option value="Cogumelos">Cogumelos</option>
+                <option value="Defumados">Defumados</option>
+                <option value="Derivados da Cana">Derivados da Cana</option>
+                <option value="Derivados do Trigo">Derivados do Trigo</option>
+                <option value="Derivados da Mandioca">Derivados da Mandioca</option>
+                <option value="Desidratados">Desidratados</option>
+                <option value="Doces">Doces</option>
+                <option value="Frango Caipira">Frango Caipira</option>
+                <option value="Flores">Flores</option>
+                <option value="Frutas">Frutas</option>
+                <option value="Grãos">Grãos</option>
+                <option value="Hortaliças">Hortaliças</option>
+                <option value="Laticínios">Laticínios</option>
+                <option value="Legumes">Legumes</option>
+                <option value="Ovos de Galinha">Ovos de Galinha</option>
+                <option value="Peixes">Peixes</option>
+                <option value="Pratos Congelados">Pratos Congelados</option>
+                <option value="Polpa de Frutas">Polpa de Frutas</option>
+                <option value="Sorvetes">Sorvetes</option>
+                <option value="Outros">Outros</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="preco">Preço</label>
+            <input type="number" class="form-control" id="preco" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="descricao">Descrição</label>
+            <textarea class="form-control" id="descricao" placeholder="" rows=4></textarea>
+        </div>
+        <button type="button" class="btn btn-orange my-2 mx-auto mb-4" onclick="salvarAnuncio();">SALVAR</button>
+    </form>
+</div>
+
+<style>
+
+
+    .fa-camera-alt {
+        font-size:3rem;
+    }
+
+    #anexador {
+        margin: 2rem auto;
+        display: block;
+        width: 70%;
+        max-width: 300px;
+        height: 150px;
+        border-radius: 10px;
+        box-shadow: 0 0 5px 3px #0002;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .form-group {
+        margin: .75rem 0;
+        padding: 0 15px;
+    }
+
+    img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<script>
+    let form = {
+        titulo: document.getElementById('titulo'),
+        localizacao: document.getElementById('localizacao'),
+        categoria: document.getElementById('categoria'),
+        preco: document.getElementById('preco'),
+        descricao: document.getElementById('descricao'),
+        imagem_base64: "",
+    }
+
+    const salvarAnuncio = () => {
+        if(form.titulo.value == "")
+            return toastr.error("Por favor preencher o título do anúncio");
+
+        if(form.localizacao.value == "")
+            return toastr.error("Por favor preencher a localização do anúncio");
+
+        if(form.categoria.value == "")
+            return toastr.error("Por favor preencher a categoria do anúncio");
+
+        if(form.preco.value == "")
+            return toastr.error("Por favor preencher o preco do anúncio");
+
+        if(form.descricao.value == "")
+            return toastr.error("Por favor preencher a descrição do anúncio");
+
+        if(form.imagem_base64 == "")
+            return toastr.error("Por favor cadastrar uma imagem no anúncio");
+
+        axios.post('', 
+          {
+            titulo: form.titulo.value,
+            localizacao: form.localizacao.value,
+            categoria: form.categoria.value,
+            preco: Number(form.preco.value),
+            descricao: form.descricao.value,
+            imagem_base64: form.imagem_base64
+          })
+        .then(function (response) {
+            if(response.status == 200) {
+                toastr.success("Anúncio cadastrado com sucesso!");
+                window.setTimeout(() => location.href = "/anuncio", 500);
+            }
+            console.log(response);
+        })
+        .catch(function (error) {
+            toastr.error("Erro ao cadastrar anúncio!");
+            console.log(error);
+        });
+    }
+
+    async function loadImage(input){
+        let file = input.files[0];
+        let base64 = await toBase64(file);
+        form.imagem_base64 = base64;
+        document.getElementById("uploadedImg").src = base64;
+        document.getElementById("uploadedImg").style.display = "block";
+        document.getElementById("imgIcon").style.display = "none";
+    }
+</script>

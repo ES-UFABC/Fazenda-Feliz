@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>@ViewBag.Title</title>
 
-    <link rel="manifest" href="/manifest.json">
+    @*<link rel="manifest" href="/manifest.json">*@
     <link rel="apple-touch-icon" sizes="180x180" href="/img/logos/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/img/logos/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/img/logos/favicon-16x16.png">
@@ -22,7 +22,6 @@
     <link rel="stylesheet" href="~/css/utils.css" defer />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" defer />
     <link rel="stylesheet" href="~/css/base_estrutura.css" defer />
-    <link rel="stylesheet" href="~/css/menu.css" defer />
     <link rel="stylesheet" href="~/css/site.css" defer />
     <link rel="stylesheet" href="~/css/colors.css" />
 
@@ -36,7 +35,7 @@
     <!-- Post-rendered Scripts -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="~/js/animations/menu.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 
@@ -52,13 +51,23 @@
     <!-- Footer -->
     <footer>
         <div id="menu-footer">
-            <a href="/favoritos" class="menu-item">
-                <i class="fas fa-heart"></i>
-                <p>Favoritos</p>
+            @if(ViewBag.TipoUsuario == "Produtor")
+            {
+                <a href="/anuncio/criar" class="menu-item">
+                    <i class="fas fa-plus-square"></i>
+                    <p>Anúncio</p>
+                </a>
+            }
+            else
+            {
+                <a href="/favoritos" class="menu-item">
+                    <i class="fas fa-heart"></i>
+                    <p>Favoritos</p>
+                </a>
+            }
+            <a href="/" id="menu-btn" class="menu-item">
+                <i class="fas fa-home"></i>
             </a>
-            <div id="menu-btn" class="menu-item">
-                <i class="fas fa-bars"></i>
-            </div>
             <a href="/perfil" class="menu-item">
                 <i class="fas fa-user"></i>
                 <p>Perfil</p>
