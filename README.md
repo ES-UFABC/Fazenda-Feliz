@@ -8,6 +8,27 @@
 
 O projeto consiste numa plataforma de vendas online por navegador focada na compra e venda de produtos agrícolas de pequenos produtores de forma fácil e prática, facilitando o contato entre o agricultor e o consumidor final.
 
+## Técnologias
+**Backend** 
+- ASPNET Core 6
+- C# 6
+
+**Arquitetura**
+- Clean Architecture e MVC
+
+**ORM**
+- Entity Framework Core
+
+**Frontend**
+- HTML5
+- CSS3
+- Javascript ES6
+
+**Libs**
+- Bootstrap
+- Jquery
+- Axios
+
 ## Instalação
 
 texto
