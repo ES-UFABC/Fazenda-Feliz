@@ -1,0 +1,164 @@
+﻿@{
+    ViewData["Title"] = "Criar Conta";
+}
+
+<div>
+    <h3 class="page-title">Cadastro</h3>
+    <label id="anexador" for="foto">
+        <input id="foto" hidden type="file" multiple="false" accept="image/*" onchange="loadImage(this);"/>
+        <i id="imgIcon" class="fas fa-camera-alt"></i>
+        <img id="uploadedImg" src="" style=display:none;/>
+    </label>
+
+    <form>
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" class="form-control" id="nome" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <input type="text" class="form-control" id="telefone" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="tipo">Perfil</label>
+            <select class="form-control" id="tipo" placeholder="">
+                <option value="">- Selecione - </option>
+                <option value="Produtor">Produtor</option>
+                <option value="Consumidor">Consumidor</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="senha">Senha</label>
+            <input type="password" class="form-control" id="senha" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="senha2">Confirmar Senha</label>
+            <input type="password" class="form-control" id="senha2" placeholder="">
+        </div>
+        @Html.AntiForgeryToken()
+        <button type="button" class="btn btn-green my-2 mx-auto mb-4" onclick="salvarUsuario();">SALVAR</button>
+    </form>
+</div>
+
+<style>
+    main{
+        padding-bottom: 0 !important;
+    }
+
+    .container {
+        padding: 0;
+    }
+
+    .fa-camera-alt {
+        font-size:2rem;
+    }
+
+    #anexador {
+        margin: 2rem auto;
+        display: block;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        box-shadow: 0 0 5px 3px #0002;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .form-group {
+        margin: .75rem 0;
+        padding: 0 15px;
+    }
+
+    img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
+
+    form {
+        background: linear-gradient(179.95deg, rgba(86, 196, 120, 0.6) 1.39%, rgba(144, 237, 128, 0.18) 99.95%);
+        padding: 1rem;
+        border-radius: 20px;
+    }
+</style>
+
+<script>
+    $(document).ready(() => {
+        $("footer").hide();
+    })
+
+    let form = {
+        nome: document.getElementById('nome'),
+        email: document.getElementById('email'),
+        telefone: document.getElementById('telefone'),
+        tipo: document.getElementById('tipo'),
+        senha: document.getElementById('senha'),
+        senha2: document.getElementById('senha2'),
+        imagem_base64: ""
+    }
+
+    const validaForm = () => {
+        validado = true
+        if(form.nome.value == "") {
+            toastr.error("Por favor inserir um nome");
+            validado = false;
+        }
+        if(form.email.value == "") {
+            toastr.error("Por favor inserir um email");
+            validado = false;
+        }
+        if(form.telefone.value == "") {
+            toastr.error("Por favor inserir um telefone");
+            validado = false;
+        }
+        if(form.senha.value == "") {
+            toastr.error("Por favor inserir um senha");
+            validado = false;
+        }
+        if(form.senha2.value != form.senha.value) {
+            toastr.error("As senhas não são iguais");
+            validado = false;
+        }
+        return validado;
+    }
+
+    const salvarUsuario = () => {
+        if(validaForm() == false) return;
+
+        axios.post('', 
+          {
+            nome: form.nome.value,
+            email: form.email.value,
+            telefone: form.telefone.value,
+            tipo: form.tipo.value,
+            senha: form.senha.value,
+            foto: form.imagem_base64,
+          })
+        .then(function (response) {
+            if(response.status == 200) {
+                toastr.success("Usuário cadastrado com sucesso!");
+                window.location.href="/usuario/login";
+            }
+            console.log(response);
+        })
+        .catch(function (error) {
+            toastr.error("Erro ao cadastrar anúncio!");
+            console.log(error);
+        });
+    }
+
+    async function loadImage(input){
+        let file = input.files[0];
+        let base64 = await toBase64(file);
+        form.imagem_base64 = base64;
+        document.getElementById("uploadedImg").src = base64;
+        document.getElementById("uploadedImg").style.display = "block";
+        document.getElementById("imgIcon").style.display = "none";
+    }
+</script>

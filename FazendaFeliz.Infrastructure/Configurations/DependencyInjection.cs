@@ -3,6 +3,8 @@ using FazendaFeliz.ApplicationCore.Interfaces;
 using FazendaFeliz.ApplicationCore.Interfaces.Repository;
 using FazendaFeliz.Infrastructure.Data.Context;
 using FazendaFeliz.Infrastructure.Data.Repositories;
+using FazendaFeliz.Infrastructure.Services;
+using FazendaFeliz.ApplicationCore.Interfaces.Service;
 
 namespace FazendaFeliz.Infrastructure.Configurations
 {
@@ -16,7 +18,7 @@ namespace FazendaFeliz.Infrastructure.Configurations
             services.AddScoped<IAnuncioRepository, AnuncioRepository>();
 
             // Services
-            //services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IIdentityService, IdentityService>();
 
             return services;
         }
