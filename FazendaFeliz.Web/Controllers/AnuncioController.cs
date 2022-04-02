@@ -1,28 +1,33 @@
 ﻿using FazendaFeliz.ApplicationCore.Business;
 using FazendaFeliz.ApplicationCore.Interfaces.Repository;
+using FazendaFeliz.ApplicationCore.Interfaces.Service;
 using FazendaFeliz.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 
 namespace FazendaFeliz.Web.Controllers
 {
+    [Authorize]
     [Route("anuncio")]
     public class AnuncioController : Controller
     {
         public readonly IUsuarioRepository _usuarioRepository;
         public readonly IAnuncioRepository _anuncioRepository;
+        public readonly IIdentityService _identityService;
 
-        public AnuncioController(IUsuarioRepository usuarioRepository, IAnuncioRepository anuncioRepository)
+        public AnuncioController(IUsuarioRepository usuarioRepository, IAnuncioRepository anuncioRepository, IIdentityService identityService)
         {
             _usuarioRepository = usuarioRepository;
             _anuncioRepository = anuncioRepository;
+            _identityService = identityService;
         }
 
         public async Task<IActionResult> Index()
         {
-            ViewData["TipoUsuario"] = "Produtor";
-            //PEGA OS MEUS ANUNCIOS DO BANCO E PASSA PRA VIEW
+            ViewData["TipoUsuario"] = _identityService.ObterRole();
             var anuncios = await _anuncioRepository.ObterTodos();
             return View(anuncios);
         }
@@ -30,14 +35,14 @@ namespace FazendaFeliz.Web.Controllers
         [HttpGet("criar")]
         public IActionResult CriarAnuncio()
         {
-            ViewData["TipoUsuario"] = "Produtor";
+            ViewData["TipoUsuario"] = _identityService.ObterRole();
             return View();
         }
 
         [HttpGet("editar/{idAnuncio}")]
         public async Task<IActionResult> EditarAnuncio(int idAnuncio)
         {
-            ViewData["TipoUsuario"] = "Produtor";
+            ViewData["TipoUsuario"] = _identityService.ObterRole();
             //OBTER O ANUNCIO DO BANCO E CARREGAR NA PÁGINA
             //puxo meu anuncio do BD pelo id
             var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);

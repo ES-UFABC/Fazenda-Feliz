@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="content">
+    <img class=mb-5 src="~/img/logos/logo.png"/>
+
+    <form>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="senha">Senha</label>
+            <input type="password" class="form-control" id="senha" placeholder="">
+        </div>
+        <button type="button" class="btn btn-orange my-2 mx-auto mb-1" onclick="salvarUsuario();">Logar</button>
+        <a href="/usuario/novo">Não tenho conta</a>
+    </form>
+</div>
+
+<style>
+    main{
+        padding-bottom: 0 !important;
+    }
+
+    img {
+        width: 50%;
+        max-width: 300px;
+        margin: 5rem auto;
+        display: block;
+    }
+
+    form {
+        margin-top: 5rem;
+    }
+
+    a {
+        color: var(--clr-orange);
+        text-align: center;
+        width: 100%;
+        display: block;
+    }
+</style>
+
+<script>
+    $(document).ready(() => {
+        $("footer").hide();
+    })
+    let form = {
+        email: document.getElementById('email'),
+        senha: document.getElementById('senha'),
+    }
+
+    const validaForm = () => {
+        validado = true
+        if(form.email.value == "") {
+            toastr.error("Por favor inserir um email");
+            validado = false;
+        }
+        if(form.senha.value == "") {
+            toastr.error("Por favor inserir um senha");
+            validado = false;
+        }
+        return validado;
+    }
+
+    const salvarUsuario = () => {
+        if(validaForm() == false) return;
+
+        axios.post('', 
+          {
+            email: form.email.value,
+            senha: form.senha.value,
+          })
+        .then(function (response) {
+            if(response.status == 200) {
+                toastr.success("Usuário cadastrado com sucesso!");
+                if(url.searchParams.get("ReturnUrl") != null)
+                    window.location.href= url.searchParams.get("ReturnUrl")
+                else 
+                    window.location.href= "/";
+            }
+            console.log(response);
+        })
+        .catch(function (error) {
+            toastr.error("Erro ao cadastrar anúncio!");
+            console.log(error);
+        });
+    }
+
+    async function loadImage(input){
+        let file = input.files[0];
+        let base64 = await toBase64(file);
+        form.imagem_base64 = base64;
+        document.getElementById("uploadedImg").src = base64;
+        document.getElementById("uploadedImg").style.display = "block";
+        document.getElementById("imgIcon").style.display = "none";
+    }
+</script>

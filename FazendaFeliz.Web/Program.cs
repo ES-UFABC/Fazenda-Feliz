@@ -1,9 +1,6 @@
 using FazendaFeliz.Infrastructure.Configurations;
 using FazendaFeliz.Infrastructure.Data.Context;
-using FazendaFeliz.Web.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web.UI;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,11 +16,17 @@ builder.Services.AddControllersWithViews();
 #endif
 
 builder.Services.AddResponseCompression();
-/*builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-        .AddMicrosoftIdentityWebApp(Configuration.GetSection("AzureAd"));*/
 
-builder.Services.AddControllersWithViews()
-        .AddMicrosoftIdentityUI();
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthentication("Identity.Login")
+    .AddCookie("Identity.Login", config =>
+    {
+        config.Cookie.Name = "Identity.Login";
+        config.LoginPath = "/usuario/login";
+        config.AccessDeniedPath = "/usuario/criar";
+        config.ExpireTimeSpan = TimeSpan.FromHours(1);
+    });
 
 string mySQLConnectionString = configuration.GetConnectionString("MySqlConnectionString");
 
@@ -31,15 +34,6 @@ builder.Services.AddDbContext<AppDbContext>(optionsBuilder => optionsBuilder.Use
     mySQLConnectionString, ServerVersion.AutoDetect(mySQLConnectionString)));
 
 builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromSeconds(10);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-    options.Cookie.SameSite = SameSiteMode.None; // To prevent iOS SSO infinite redirect with Lax cookies (default)
-});
-
 builder.Services.AddInfrastructure();
 
 
@@ -58,6 +52,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
