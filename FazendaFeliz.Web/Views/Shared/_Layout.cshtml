@@ -20,7 +20,7 @@
 
     <!-- CSS  -->
     <link rel="stylesheet" href="~/css/utils.css" defer />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" defer />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/base_estrutura.css" defer />
     <link rel="stylesheet" href="~/css/site.css" defer />
     <link rel="stylesheet" href="~/css/colors.css" />
@@ -51,7 +51,7 @@
     <!-- Footer -->
     <footer>
         <div id="menu-footer">
-            @if(ViewBag.TipoUsuario == "Produtor")
+            @if(User.Claims?.Where(i => i.Type.Contains("role")).FirstOrDefault()?.Value == "Produtor")
             {
                 <a href="/anuncio/criar" class="menu-item">
                     <i class="fas fa-plus-square"></i>
