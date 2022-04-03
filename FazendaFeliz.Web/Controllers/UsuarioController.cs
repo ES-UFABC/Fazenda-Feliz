@@ -1,5 +1,6 @@
 ﻿using FazendaFeliz.ApplicationCore.Business;
 using FazendaFeliz.ApplicationCore.Interfaces.Repository;
+using FazendaFeliz.ApplicationCore.Interfaces.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,10 +12,12 @@ namespace FazendaFeliz.Web.Controllers
     public class UsuarioController : Controller
     {
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IIdentityService _identityService;
 
-        public UsuarioController(IUsuarioRepository usuarioRepository)
+        public UsuarioController(IUsuarioRepository usuarioRepository, IIdentityService identityService)
         {
             _usuarioRepository = usuarioRepository;
+            _identityService = identityService;
         }
 
         [HttpGet("/usuario/novo")]
@@ -59,6 +62,7 @@ namespace FazendaFeliz.Web.Controllers
                     new AuthenticationProperties
                     {
                         ExpiresUtc = DateTime.UtcNow.AddHours(1),
+                        IsPersistent= true,
                     });
                 return Json(ReturnUrl);
             }
@@ -66,6 +70,34 @@ namespace FazendaFeliz.Web.Controllers
             return Unauthorized();
         }
 
+        [Authorize]
+        [HttpGet("/perfil")]
+        public ActionResult Perfil()
+        {
+            var emailUsuario = _identityService.ObterEmail();
+            var usuario = _usuarioRepository.ObterPorEmail(emailUsuario);
+            return View("/Views/Usuario/Perfil.cshtml", usuario);
+        }
+
+        [Authorize]
+        [HttpPost("/perfil/editar")]
+        public async Task<ActionResult> Perfil([FromBody] Usuario user)
+        {
+            var emailUsuario = _identityService.ObterEmail();
+            var usuario = _usuarioRepository.ObterPorEmail(emailUsuario);
+
+            usuario.Telefone = user.Telefone;
+            usuario.Email = user.Email;
+            usuario.Nome = user.Nome;
+            if (user.Senha != "")
+                usuario.Senha = user.Senha;
+
+            await _usuarioRepository.SaveChanges();
+
+            return Json(1);
+        }
+
+        [HttpPost("/logout")]
         public async Task<IActionResult> Logout()
         {
             if(User.Identity.IsAuthenticated)

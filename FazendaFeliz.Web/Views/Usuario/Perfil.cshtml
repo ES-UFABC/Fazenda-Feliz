@@ -1,0 +1,157 @@
+﻿@model FazendaFeliz.ApplicationCore.Business.Usuario; 
+
+@{
+    ViewData["Title"] = "Meu Perfil";
+}
+
+<div class="content">
+    <h3 class="page-title">Meu Perfil</h3>
+    <label id="anexador" for="img_anuncio">
+        <input id="img_anuncio" hidden type="file" multiple="false" accept="image/*" onchange="loadImage(this);"/>
+        <img id="uploadedImg" src="@Model.Foto"/>
+    </label>
+    <form>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" class="form-control" disabled value="@Model.Email" id="email" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" class="form-control" value="@Model.Nome" id="nome" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="telefone">Telefone</label>
+            <input type="text" class="form-control" value="@Model.Telefone" id="telefone" placeholder="">
+        </div>
+        <div class="custom-control custom-switch">
+          <input onchange="alterarSenha()" type="checkbox" class="custom-control-input" id="customSwitch1">
+          <label class="custom-control-label" for="customSwitch1">Alterar Senha</label>
+        </div>
+        <div id="mudar-senha">
+            <div class="form-group">
+                <label for="senha1">Senha antiga</label>
+                <input type="password" class="form-control"  id="senha1" placeholder="">
+            </div>
+            <div class="form-group">
+                <label for="senha2">Senha nova</label>
+                <input type="password" class="form-control" id="senha2" placeholder="">
+            </div>
+            <div class="form-group">
+                <label for="senha3">Confirmar Senha</label>
+                <input type="password" class="form-control" id="senha3" placeholder="">
+            </div>
+        </div>
+        <button type="button" class="btn btn-orange my-2 mx-auto mb-1" onclick="salvarUsuario();">Salvar <i class="fas fa-save" style="margin-left: .5rem;"></i></button>
+    </form>
+    <button type="button" class="btn btn-red my-2 mx-auto mb-1" onclick="deslogar();">Sair<i class="fas fa-sign-out" style="margin-left: .5rem;"></i></button>
+</div>
+
+<style>
+    #anexador {
+        margin: 2rem auto;
+        display: block;
+        width: 40%;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        box-shadow: 0 0 5px 3px #0002;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+    }
+
+    #mudar-senha {
+        display: none;
+    }
+
+    .form-group {
+        margin: 10px 0;
+    }
+</style>
+
+<script>
+    let form = {
+        nome: document.getElementById('nome'),
+        email: document.getElementById('email'),
+        telefone: document.getElementById('telefone'),
+        senha1: document.getElementById('senha1'),
+        senha2: document.getElementById('senha2'),
+        senha3: document.getElementById('senha3'),
+        img_base64: "",
+    }
+
+    const alterarSenha = () => {
+        $("#mudar-senha").toggle();
+    }
+
+    const validaForm = () => {
+        validado = true
+        if(form.nome.value == "") {
+            toastr.error("Por favor inserir um nome");
+            validado = false;
+        }
+        if(form.email.value == "") {
+            toastr.error("Por favor inserir um email");
+            validado = false;
+        }
+        if(form.telefone.value == "") {
+            toastr.error("Por favor inserir um telefone");
+            validado = false;
+        }
+
+        if(form.senha1.value != "") {
+            if(form.senha2.value != form.senha3.value) {
+                toastr.error("Senhas precisam ser iguais");
+                validado = false;
+            }
+        }
+
+        return validado;
+    }
+
+    const deslogar = () => {
+        axios.post('logout')
+        .then(function (response) {
+            window.location.reload();
+        })
+        .catch(function (error) {
+            toastr.error("Erro ao fazer logout");
+            console.log(error);
+        });
+    }
+
+    const salvarUsuario = () => {
+        if(validaForm() == false) return;
+        axios.post('/perfil/editar', 
+          {
+            nome: form.nome.value,
+            email: form.email.value,
+            telefone: form.telefone.value,
+            senha: form.senha2.value,
+          })
+        .then(function (response) {
+            toastr.success("Usuário atualizado com sucesso!");  
+            console.log(response);
+        })
+        .catch(function (error) {
+            toastr.error("Erro ao cadastrar anúncio!");
+            console.log(error);
+        });
+    }
+
+    async function loadImage(input){
+        let file = input.files[0];
+        let base64 = await toBase64(file);
+        form.imagem_base64 = base64;
+        document.getElementById("uploadedImg").src = base64;
+        document.getElementById("uploadedImg").style.display = "block";
+        document.getElementById("imgIcon").style.display = "none";
+    }
+</script>
