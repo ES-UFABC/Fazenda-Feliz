@@ -137,7 +137,8 @@
             senha: form.senha2.value,
           })
         .then(function (response) {
-            toastr.success("Usuário atualizado com sucesso!");  
+            toastr.success("Usuário atualizado com sucesso!");
+            window.setTimeout(() => location.href = "/anuncio", 500);
             console.log(response);
         })
         .catch(function (error) {

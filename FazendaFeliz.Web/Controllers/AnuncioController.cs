@@ -17,11 +17,13 @@ namespace FazendaFeliz.Web.Controllers
         public readonly IUsuarioRepository _usuarioRepository;
         public readonly IAnuncioRepository _anuncioRepository;
         public readonly IIdentityService _identityService;
+        public readonly IReclamacaoRepository _reclamacaoRepository;
 
-        public AnuncioController(IUsuarioRepository usuarioRepository, IAnuncioRepository anuncioRepository, IIdentityService identityService)
+        public AnuncioController(IUsuarioRepository usuarioRepository, IAnuncioRepository anuncioRepository, IReclamacaoRepository reclamacaoRepository, IIdentityService identityService)
         {
             _usuarioRepository = usuarioRepository;
             _anuncioRepository = anuncioRepository;
+            _reclamacaoRepository = reclamacaoRepository;
             _identityService = identityService;
         }
 
@@ -29,7 +31,10 @@ namespace FazendaFeliz.Web.Controllers
         {
             ViewData["TipoUsuario"] = _identityService.ObterRole();
             var anuncios = await _anuncioRepository.ObterTodos();
-            return View(anuncios);
+            if (String.Equals(_identityService.ObterRole(), "Produtor"))
+                return View("/Views/Anuncio/AnunciosProdutor.cshtml", anuncios);
+            else
+                return View("/Views/Anuncio/AnunciosConsumidor.cshtml", anuncios);
         }
 
         [HttpGet("criar")]
@@ -92,6 +97,27 @@ namespace FazendaFeliz.Web.Controllers
             }
             
             await _anuncioRepository.SaveChanges();
+
+            return Json(1);
+        }
+
+        [HttpGet("reclamar/{idAnuncio}")]
+        public IActionResult ReclamarAnuncio()
+        {
+            ViewData["TipoUsuario"] = _identityService.ObterRole();
+            //OBTER O ANUNCIO DO BANCO E CARREGAR NA PÁGINA
+            //puxo meu anuncio do BD pelo id
+
+            return View("ReclamarAnuncio");
+        }
+
+        [HttpPost("reclamar/{idAnuncio}")]
+        public async Task<IActionResult> CriarReclamacao([FromBody] Reclamacao reclamacaoData)
+        {
+            
+            _reclamacaoRepository.Add(reclamacaoData);
+         
+            await _reclamacaoRepository.SaveChanges();
 
             return Json(1);
         }

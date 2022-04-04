@@ -16,6 +16,7 @@ namespace FazendaFeliz.Infrastructure.Configurations
             services.AddScoped<AppDbContext>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IAnuncioRepository, AnuncioRepository>();
+            services.AddScoped<IReclamacaoRepository, ReclamacaoRepository>();
 
             // Services
             services.AddTransient<IIdentityService, IdentityService>();
