@@ -1,0 +1,94 @@
+﻿@model List<FazendaFeliz.ApplicationCore.Business.Anuncio>; 
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div>
+    <h3 class="page-title pb-2">Anúncios perto de você</h3>
+    <div class="anuncios-wrapper row">
+    @foreach(var anuncio in Model)
+    {
+            @if (!anuncio.Oculto)
+            {
+                <section class="col-12 col-lg-4 px-2">
+                    <div class="anuncio">
+                        <h4>@anuncio.Titulo</h4>
+                        <div class="_card-body">
+                            <div class="info">
+                                <div>
+                                <label><i class="fa-solid fa-location-dot mr-2"></i>Localização</label>
+                                <p>@anuncio.Localizacao</p>
+                            </div>
+                            <div>
+                                <label><i class="fa-solid fa-money-bill-1-wave mr-2"></i>Preço</label>
+                                <p>@anuncio.Preco</p>
+                            </div>
+                        </div>
+                        <img src="@anuncio.Imagem_Base64"/>
+                    </div>
+                    <div class="edit-anuncio">
+                        <i class="fa-solid fa-heart mr-2" onclick="favoritar(@anuncio.Id)"></i>
+                        <i class="fa-solid fa-bullhorn" onclick="reclamar(@anuncio.Id)"></i>
+                    </div>
+                </div>
+                </section>
+            }
+    }
+    </div>
+</div>
+
+<style>
+    .mr-2 {
+        margin-right: 10px;
+    }
+    .anuncio {
+        border-radius: 10px;
+        border: solid 2px var(--clr-green);
+        padding: 1rem;
+        box-shadow: 0 0 5px 3px #0002;
+        margin: 1rem 0;
+        position: relative;
+    }
+
+    .edit-anuncio{
+        position: absolute;
+        right: 10px;
+        top: -30px;
+        background: var(--clr-yellow-green);
+        color: var(--clr-green);
+        padding: 2px 5px;
+    }
+
+    .edit-anuncio i{
+        cursor: pointer;
+    }
+
+    .anuncio h4 {
+        font-weight:bold;
+        text-align: center;
+    }
+
+    .info label{
+        font-weight: bold;
+    }
+
+    img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin: auto 0;
+    }
+
+    ._card-body {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+
+<script>
+    const reclamar = (idAnuncio) => {
+        window.location.href = "anuncio/reclamar/"+idAnuncio;
+    }
+</script>

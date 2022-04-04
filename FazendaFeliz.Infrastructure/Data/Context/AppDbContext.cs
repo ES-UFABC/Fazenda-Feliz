@@ -11,5 +11,6 @@ namespace FazendaFeliz.Infrastructure.Data.Context
         }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Anuncio> Anuncios { get; set; }
+        public DbSet<Reclamacao> Reclamacaos { get; set; }
     }
 }
