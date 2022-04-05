@@ -28,8 +28,15 @@
                         <img src="@anuncio.Imagem_Base64"/>
                     </div>
                     <div class="edit-anuncio">
-                        <i class="fa-solid fa-heart mr-2" onclick="favoritar(@anuncio.Id)"></i>
-                        <i class="fa-solid fa-bullhorn" onclick="reclamar(@anuncio.Id)"></i>
+                            @if (anuncio.Favorito)
+                            {
+                                <i class="fa-solid fa-heart mr-2" style="color:red;" onclick="favoritar(@anuncio.Id)"></i>
+                            }
+                            else
+                            {
+                              <i class="fa-solid fa-heart mr-2" onclick="favoritar(@anuncio.Id)"></i>  
+                            }
+                            <i class="fa-solid fa-bullhorn" onclick="reclamar(@anuncio.Id)"></i>
                     </div>
                 </div>
                 </section>
@@ -90,5 +97,22 @@
 <script>
     const reclamar = (idAnuncio) => {
         window.location.href = "anuncio/reclamar/"+idAnuncio;
+    }
+
+     const favoritar = (idAnuncio) => {
+        axios({ method: 'post', url: '/anuncio/favoritar', data: parseInt(idAnuncio), headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }})
+        .then(function (response) {
+            if(response.status == 200) {
+                toastr.success("Anúncio favoritado com sucesso!");
+                window.location.reload();
+            }
+            console.log(response);
+        })
+        .catch(function (error) {
+            toastr.error("Erro ao favoritar anúncio");
+            console.log(error);
+        });
     }
 </script>
