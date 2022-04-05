@@ -9,5 +9,7 @@
         public string Descricao { get; set; }
         public string Imagem_Base64 { get; set; }
         public Boolean Oculto { get; set; }
+        public Boolean Favorito { get; set; }
+
     }
 }
