@@ -101,7 +101,7 @@ namespace FazendaFeliz.Web.Controllers
             return Json(1);
         }
 
-        [HttpGet("reclamar/{idAnuncio}")]
+        [HttpGet("/anuncio/reclamar/{idAnuncio}")]
         public IActionResult ReclamarAnuncio()
         {
             ViewData["TipoUsuario"] = _identityService.ObterRole();
@@ -111,7 +111,7 @@ namespace FazendaFeliz.Web.Controllers
             return View("ReclamarAnuncio");
         }
 
-        [HttpPost("reclamar/{idAnuncio}")]
+        [HttpPost("/anuncio/reclamar/{idAnuncio}")]
         public async Task<IActionResult> CriarReclamacao([FromBody] Reclamacao reclamacaoData)
         {
             
@@ -119,22 +119,6 @@ namespace FazendaFeliz.Web.Controllers
          
             await _reclamacaoRepository.SaveChanges();
 
-            return Json(1);
-        }
-
-        [HttpPost("favoritar")]
-        public async Task<IActionResult> FavoritarAnuncio([FromBody] int idAnuncio)
-        {
-            //OBTER O ANUNCIO DO BANCO E CARREGAR NA PÁGINA
-            var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
-
-            if (anuncio.Favorito == false)
-                anuncio.Favorito = true;
-            else anuncio.Favorito = false;
-
-            await _anuncioRepository.SaveChanges();
-
-            //return View();
             return Json(1);
         }
     }
