@@ -37,7 +37,7 @@ namespace FazendaFeliz.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<Anuncio> anuncios = (await _anuncioRepository.ObterTodos());
+            List<AnuncioComFavorito> anuncios = await _anuncioRepository.ObterTodosComFavorito(usuarioLogado.Id);
             if (_identityService.ObterRole() == "Produtor")
             {
                 anuncios = anuncios.Where(a => a.Id_Usuario == usuarioLogado.Id).ToList();

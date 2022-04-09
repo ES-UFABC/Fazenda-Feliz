@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace FazendaFeliz.ApplicationCore.Interfaces.Repository
 {
-    public interface IAnuncioRepository : IRepository<Anuncio>
+    public interface IFavoritoRepository : IRepository<Favorito>
     {
-        Task<List<AnuncioComFavorito>> ObterTodosComFavorito(int id_usuario);
+        Task<List<Anuncio>> ObterAnunciosFavoritosPorUsuario(int id_usuario);
+        Task<Favorito> ObterPorUsuarioAnuncio(int id_usuario, int id_anuncio);
     }
 }

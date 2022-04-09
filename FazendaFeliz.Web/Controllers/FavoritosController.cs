@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace FazendaFeliz.Web.Controllers
 {
@@ -17,19 +18,26 @@ namespace FazendaFeliz.Web.Controllers
         public readonly IUsuarioRepository _usuarioRepository;
         public readonly IAnuncioRepository _anuncioRepository;
         public readonly IIdentityService _identityService;
-        public readonly IReclamacaoRepository _reclamacaoRepository;
+        public readonly IFavoritoRepository _favoritoRepository;
+        public Usuario usuarioLogado;
 
-        public FavoritosController(IUsuarioRepository usuarioRepository, IAnuncioRepository anuncioRepository, IReclamacaoRepository reclamacaoRepository, IIdentityService identityService)
+        public FavoritosController(IUsuarioRepository usuarioRepository, IAnuncioRepository anuncioRepository, IFavoritoRepository favoritoRepository, IIdentityService identityService)
         {
             _usuarioRepository = usuarioRepository;
             _anuncioRepository = anuncioRepository;
-            _reclamacaoRepository = reclamacaoRepository;
+            _favoritoRepository = favoritoRepository;
             _identityService = identityService;
+        }
+
+        [NonAction]
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            usuarioLogado = _usuarioRepository.ObterPorEmail(_identityService.ObterEmail());
         }
 
         public async Task<IActionResult> Index()
         {
-            var anuncios = await _anuncioRepository.ObterTodos();         
+            var anuncios = await _favoritoRepository.ObterAnunciosFavoritosPorUsuario(usuarioLogado.Id);
             return View("/Views/Favoritos/AnunciosFavoritos.cshtml", anuncios);
         }
 
@@ -37,10 +45,19 @@ namespace FazendaFeliz.Web.Controllers
         [HttpPost("/favoritos/favoritar")]
         public async Task<IActionResult> FavoritarAnuncio([FromBody] int idAnuncio)
         {
-            var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
-            await _anuncioRepository.SaveChanges();
+            var favorito = await _favoritoRepository.ObterPorUsuarioAnuncio(usuarioLogado.Id, idAnuncio);
+            if(favorito is not null)
+            {
+                await _favoritoRepository.Remover(favorito);
+                return Json(1);
+            }
 
-            //return View();
+            await _favoritoRepository.Adicionar(new Favorito()
+            {
+                Id_Anuncio = idAnuncio,
+                Id_Usuario = usuarioLogado.Id
+            });
+
             return Json(1);
         }
     }

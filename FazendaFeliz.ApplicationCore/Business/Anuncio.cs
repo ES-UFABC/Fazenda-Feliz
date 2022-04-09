@@ -13,4 +13,9 @@ namespace FazendaFeliz.ApplicationCore.Business
         public string Descricao { get; set; }
         public string Imagem_Base64 { get; set; }
     }
+
+    public class AnuncioComFavorito : Anuncio
+    {
+        public Boolean Favorito { get; set; }
+    }
 }

@@ -1,4 +1,4 @@
-﻿@model List<FazendaFeliz.ApplicationCore.Business.Anuncio>; 
+﻿@model List<FazendaFeliz.ApplicationCore.Business.AnuncioComFavorito>; 
 
 @{
     ViewData["Title"] = "Home Page";
@@ -28,7 +28,7 @@
                         <img src="@anuncio.Imagem_Base64"/>
                     </div>
                     <div class="edit-anuncio">
-                            @if (true) //anuncio oculto
+                            @if (anuncio.Favorito)
                             {
                                 <i class="fa-solid fa-heart mr-2" style="color:red;" onclick="favoritar(@anuncio.Id)"></i>
                             }
