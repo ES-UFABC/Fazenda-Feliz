@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace FazendaFeliz.Web.Controllers
 {
@@ -18,6 +19,7 @@ namespace FazendaFeliz.Web.Controllers
         public readonly IAnuncioRepository _anuncioRepository;
         public readonly IIdentityService _identityService;
         public readonly IReclamacaoRepository _reclamacaoRepository;
+        public Usuario usuarioLogado;
 
         public AnuncioController(IUsuarioRepository usuarioRepository, IAnuncioRepository anuncioRepository, IReclamacaoRepository reclamacaoRepository, IIdentityService identityService)
         {
@@ -27,29 +29,32 @@ namespace FazendaFeliz.Web.Controllers
             _identityService = identityService;
         }
 
+        [NonAction]
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            usuarioLogado = _usuarioRepository.ObterPorEmail(_identityService.ObterEmail());
+        }
+
         public async Task<IActionResult> Index()
         {
-            ViewData["TipoUsuario"] = _identityService.ObterRole();
-            var anuncios = await _anuncioRepository.ObterTodos();
-            if (String.Equals(_identityService.ObterRole(), "Produtor"))
+            List<Anuncio> anuncios = (await _anuncioRepository.ObterTodos());
+            if (_identityService.ObterRole() == "Produtor")
+            {
+                anuncios = anuncios.Where(a => a.Id_Usuario == usuarioLogado.Id).ToList();
                 return View("/Views/Anuncio/AnunciosProdutor.cshtml", anuncios);
-            else
-                return View("/Views/Anuncio/AnunciosConsumidor.cshtml", anuncios);
+            }
+            return View("/Views/Anuncio/AnunciosConsumidor.cshtml", anuncios);
         }
 
         [HttpGet("criar")]
         public IActionResult CriarAnuncio()
         {
-            ViewData["TipoUsuario"] = _identityService.ObterRole();
             return View();
         }
 
         [HttpGet("editar/{idAnuncio}")]
         public async Task<IActionResult> EditarAnuncio(int idAnuncio)
         {
-            ViewData["TipoUsuario"] = _identityService.ObterRole();
-            //OBTER O ANUNCIO DO BANCO E CARREGAR NA PÁGINA
-            //puxo meu anuncio do BD pelo id
             var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
             
             return View("EditarAnuncio", anuncio);
@@ -58,13 +63,7 @@ namespace FazendaFeliz.Web.Controllers
         [HttpPost("ocultar")]
         public async Task<IActionResult> OcultarAnuncio([FromBody]int idAnuncio)
         {
-            //OBTER O ANUNCIO DO BANCO E CARREGAR NA PÁGINA
             var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
-
-            if (anuncio.Oculto == false)
-                anuncio.Oculto = true;
-            else anuncio.Oculto = false;
-
             await _anuncioRepository.SaveChanges();
 
             //return View();
@@ -74,7 +73,6 @@ namespace FazendaFeliz.Web.Controllers
         [HttpPost("excluir")]
         public async Task<IActionResult> ExcluirAnuncio([FromBody]int idAnuncio)
         {
-            //OBTER O ANUNCIO DO BANCO E CARREGAR NA PÁGINA
             var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
             await _anuncioRepository.Remover(anuncio);
             return Json(1);
@@ -83,6 +81,7 @@ namespace FazendaFeliz.Web.Controllers
         [HttpPost("criar")]
         public async Task<IActionResult> CriarAnuncio([FromBody] Anuncio anuncioData)
         {
+            anuncioData.Id_Usuario = usuarioLogado.Id;
             if (anuncioData.Id == 0) {//se o anuncio for novo
                 _anuncioRepository.Add(anuncioData);
             }
@@ -104,21 +103,15 @@ namespace FazendaFeliz.Web.Controllers
         [HttpGet("/anuncio/reclamar/{idAnuncio}")]
         public IActionResult ReclamarAnuncio()
         {
-            ViewData["TipoUsuario"] = _identityService.ObterRole();
-            //OBTER O ANUNCIO DO BANCO E CARREGAR NA PÁGINA
-            //puxo meu anuncio do BD pelo id
-
             return View("ReclamarAnuncio");
         }
 
         [HttpPost("/anuncio/reclamar/{idAnuncio}")]
         public async Task<IActionResult> CriarReclamacao([FromBody] Reclamacao reclamacaoData)
         {
-            
+            //inserir relação MxN
             _reclamacaoRepository.Add(reclamacaoData);
-         
             await _reclamacaoRepository.SaveChanges();
-
             return Json(1);
         }
     }
