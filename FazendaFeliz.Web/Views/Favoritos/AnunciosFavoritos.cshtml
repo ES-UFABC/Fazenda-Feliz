@@ -1,7 +1,7 @@
 ﻿@model List<FazendaFeliz.ApplicationCore.Business.Anuncio>; 
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Favoritos";
 }
 
 <div>
@@ -9,7 +9,7 @@
     <div class="anuncios-wrapper row">
     @foreach(var anuncio in Model)
     {
-            @if (anuncio.Favorito)
+            @if (true)
             {
                 <section class="col-12 col-lg-4 px-2">
                     <div class="anuncio">
@@ -28,7 +28,7 @@
                         <img src="@anuncio.Imagem_Base64"/>
                     </div>
                     <div class="edit-anuncio">
-                            @if (anuncio.Favorito)
+                            @if (true)
                             {
                                 <i class="fa-solid fa-heart mr-2" style="color:red;" onclick="favoritar(@anuncio.Id)"></i>
                             }

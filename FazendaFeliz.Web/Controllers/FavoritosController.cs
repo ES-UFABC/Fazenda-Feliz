@@ -37,13 +37,7 @@ namespace FazendaFeliz.Web.Controllers
         [HttpPost("/favoritos/favoritar")]
         public async Task<IActionResult> FavoritarAnuncio([FromBody] int idAnuncio)
         {
-            //OBTER O ANUNCIO DO BANCO E CARREGAR NA PÁGINA
             var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
-
-            if (anuncio.Favorito == false)
-                anuncio.Favorito = true;
-            else anuncio.Favorito = false;
-
             await _anuncioRepository.SaveChanges();
 
             //return View();

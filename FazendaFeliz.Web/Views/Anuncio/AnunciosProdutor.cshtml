@@ -9,12 +9,12 @@
     <div class="anuncios-wrapper row">
     @foreach(var anuncio in Model)
     {
-            <section class="col-12 col-lg-4 px-2" @(anuncio.Oculto ? "style=opacity:0.5": "")>
+            <section class="col-12 col-lg-4 px-2">
                 <div class="anuncio">
                     <h4>@anuncio.Titulo</h4>
                     <div class="_card-body">
                         <div class="info">
-                            @if (anuncio.Oculto)
+                            @if (true)
                             {
                                  <p>ANUNCIO OCULTO</p>
                             }
