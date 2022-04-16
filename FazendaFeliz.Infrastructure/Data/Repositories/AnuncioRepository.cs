@@ -34,5 +34,15 @@ namespace FazendaFeliz.Infrastructure.Data.Repositories
 
             return anunciosFavoritos.AsNoTracking().ToListAsync();
         }
+
+        public Task<List<Anuncio>> ObterAnunciosProdutor(int id_usuario)
+        {
+            var anunciosProdutor =
+                from a in _Context.Anuncios
+                where a.Id_Usuario == id_usuario
+                select a;
+            return anunciosProdutor.AsNoTracking().ToListAsync();
+        }
+
     }
 }

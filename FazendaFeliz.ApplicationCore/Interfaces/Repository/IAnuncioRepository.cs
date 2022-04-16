@@ -9,5 +9,7 @@ namespace FazendaFeliz.ApplicationCore.Interfaces.Repository
     public interface IAnuncioRepository : IRepository<Anuncio>
     {
         Task<List<AnuncioComFavorito>> ObterTodosComFavorito(int id_usuario);
+
+        Task<List<Anuncio>> ObterAnunciosProdutor(int id_usuario);
     }
 }

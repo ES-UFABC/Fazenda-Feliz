@@ -37,13 +37,16 @@ namespace FazendaFeliz.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<AnuncioComFavorito> anuncios = await _anuncioRepository.ObterTodosComFavorito(usuarioLogado.Id);
             if (_identityService.ObterRole() == "Produtor")
             {
-                anuncios = anuncios.Where(a => a.Id_Usuario == usuarioLogado.Id).ToList();
+                List<Anuncio> anuncios = await _anuncioRepository.ObterAnunciosProdutor(usuarioLogado.Id);
                 return View("/Views/Anuncio/AnunciosProdutor.cshtml", anuncios);
             }
-            return View("/Views/Anuncio/AnunciosConsumidor.cshtml", anuncios);
+            else
+            {
+                List <AnuncioComFavorito > anuncios = await _anuncioRepository.ObterTodosComFavorito(usuarioLogado.Id);
+                return View("/Views/Anuncio/AnunciosConsumidor.cshtml", anuncios);
+            }
         }
 
         [HttpGet("criar")]
@@ -101,15 +104,18 @@ namespace FazendaFeliz.Web.Controllers
         }
 
         [HttpGet("/anuncio/reclamar/{idAnuncio}")]
-        public IActionResult ReclamarAnuncio()
+        public async Task<IActionResult> ReclamarAnuncio(int idAnuncio)
         {
-            return View("ReclamarAnuncio");
+            var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
+            return View("ReclamarAnuncio", anuncio);
         }
 
         [HttpPost("/anuncio/reclamar/{idAnuncio}")]
         public async Task<IActionResult> CriarReclamacao([FromBody] Reclamacao reclamacaoData)
         {
             //inserir relação MxN
+
+            reclamacaoData.Id_Usuario = usuarioLogado.Id;
             _reclamacaoRepository.Add(reclamacaoData);
             await _reclamacaoRepository.SaveChanges();
             return Json(1);

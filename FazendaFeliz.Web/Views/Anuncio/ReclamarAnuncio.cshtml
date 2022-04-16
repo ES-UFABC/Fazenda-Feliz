@@ -1,4 +1,5 @@
-﻿
+﻿@model FazendaFeliz.ApplicationCore.Business.Anuncio; 
+
 @{
     ViewData["Title"] = "Reclamar Anuncio";
 }
@@ -80,6 +81,7 @@
 
         axios.post('', 
           {
+            id_anuncio: @Model.Id,
             titulo: form.titulo.value,
             nome: form.nome.value,
             descricao: form.descricao.value,
