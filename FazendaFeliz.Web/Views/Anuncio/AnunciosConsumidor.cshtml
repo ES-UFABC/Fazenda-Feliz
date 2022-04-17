@@ -1,19 +1,19 @@
-﻿@model List<FazendaFeliz.ApplicationCore.Business.AnuncioComFavorito>; 
+﻿@model List<FazendaFeliz.ApplicationCore.Business.AnuncioCompleto>; 
 
 @{
     ViewData["Title"] = "Home Page";
     string[] tiposProduto = new string[] {"açúcar", "artesanato", "banana", "bebidas", "brocolis", "café", "cana", "carne", "cenoura", "cogumelos", "congelados", "defumados", "desidratados", "doces", "flores", "frango", "frutas", "graos", "hortalicas", "laticinios", "legumes", "mandioca", "morango", "outros", "ovos", "peixe", "polpa", "sorvetes", "tomate", "trigo"};
 }
 
-
 <style>
     .mr-2 {
         margin-right: 10px;
     }
+
     .anuncio {
         border-radius: 10px;
         border: solid 2px var(--clr-green);
-        padding: 1rem;
+        padding: .5rem;
         box-shadow: 0 0 5px 3px #0002;
         margin: 1rem 0;
         position: relative;
@@ -39,11 +39,16 @@
 
     .info label{
         font-weight: bold;
+        font-size: 14px;
+    }
+
+    .info p {
+        font-size: 14px;
     }
 
     img {
-        width: 120px;
-        height: 120px;
+        width: 90px;
+        height: 90px;
         object-fit: cover;
         border-radius: 10px;
         margin: auto 0;
@@ -115,13 +120,27 @@
     .botoes-filtro button:nth-child(3) {
         border-radius: 0 15px 15px 0;
     }
+
+    .produtor {
+        align-self: center;
+        padding-right: 5px;
+        text-align: center;
+        margin-left: 0;
+        font-size: 14px;
+    }
+
+    .produtor img{
+        height: 60px;
+        width: 60px;
+        border-radius: 50%;
+    }
 </style>
 
 
 <div class="filtro-produtos">
     @foreach(var produto in tiposProduto)
     {
-        <div class="produto">
+        <div class="produto" onclick="pesquisar('produto', '@produto')">
             <img src=~/img/images/@(produto).jpg/>
             <h6>@produto</h6>
         </div>
@@ -130,51 +149,55 @@
 
 <div class="search-bar">
     <i class="fa-solid fa-magnifying-glass icon"></i>
-    <input type="text" placeholder="pesquisar"/>
+    <input id='pesquisa' type="text" placeholder="pesquisar"/>
 </div>
 
 <div class="botoes-filtro">
-    <button type="button">Anúncios</button>
-    <button type="button">Produtores</button>
-    <button type="button">Localizações</button>
+    <button type="button" onclick="pesquisar('anuncios')">Anúncios</button>
+    <button type="button" onclick="pesquisar('produtores')">Produtores</button>
+    <button type="button" onclick="pesquisar('localizações')">Localizações</button>
 </div>
 
 <div>
     <div class="anuncios-wrapper row">
     @foreach(var anuncio in Model)
     {
-        <section class="col-12 col-lg-4 px-2">
-            <div class="anuncio">
-                <h4>@anuncio.Titulo</h4>
-                <div class="_card-body">
-                    <div class="info">
-                        <div>
-                        <label><i class="fa-solid fa-location-dot mr-2"></i>Localização</label>
-                        <p>@anuncio.Localizacao</p>
-                    </div>
-                    <div>
-                        <label><i class="fa-solid fa-money-bill-1-wave mr-2"></i>Preço</label>
-                        <p>@anuncio.Preco</p>
-                    </div>
-                    <div>
-                        <label><i class="fa-solid fa-plus mr-2"  style="cursor:pointer;" onclick=descricao(@anuncio.Id)></i></label>
-                    </div>
+            @if (!anuncio.Anuncio.Oculto)
+            {
+                <section class="col-12 col-lg-4 px-2">
+                    <div class="anuncio">
+                        <h4>@anuncio.Anuncio.Titulo</h4>
+                        <div class="_card-body">
+                            <div class='produtor'>
+                                <img src="@anuncio.Produtor.Foto">
+                                <p>@anuncio.Produtor.Nome</p>
+                            </div>
+                            <div class="info">
+                                <div>
+                                    <label><i class="fa-solid fa-location-dot mr-2"></i>Localização</label>
+                                    <p>@anuncio.Anuncio.Localizacao</p>
+                                </div>
+                                <div>
+                                    <label><i class="fa-solid fa-money-bill-1-wave mr-2"></i>Preço</label>
+                                    <p>@anuncio.Anuncio.Preco</p>
+                                </div>
+                            </div>
+                            <img src="@anuncio.Anuncio.Imagem_Base64"/>
+                        </div>
+                        <div class="edit-anuncio">
+                            @if (anuncio.Favorito)
+                            {
+                                <i class="fa-solid fa-heart mr-2" style="color:red;" onclick="favoritar(@anuncio.Anuncio.Id)"></i>
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-heart mr-2" onclick="favoritar(@anuncio.Anuncio.Id)"></i>
+                            }
+                            <i class="fa-solid fa-bullhorn" onclick="reclamar(@anuncio.Anuncio.Id)"></i>
                 </div>
-                <img src="@anuncio.Imagem_Base64"/>
             </div>
-            <div class="edit-anuncio">
-                    @if (anuncio.Favorito)
-                    {
-                        <i class="fa-solid fa-heart mr-2" style="color:red;" onclick="favoritar(@anuncio.Id)"></i>
-                    }
-                    else
-                    {
-                        <i class="fa-solid fa-heart mr-2" onclick="favoritar(@anuncio.Id)"></i>  
-                    }
-                    <i class="fa-solid fa-bullhorn" onclick="reclamar(@anuncio.Id)"></i>
-            </div>
-        </div>
-        </section>
+            </section>
+        }
     }
     </div>
 </div>
@@ -202,5 +225,17 @@
             toastr.error("Erro ao favoritar anúncio");
             console.log(error);
         });
+    }
+
+    document.getElementById('pesquisa').addEventListener("keyup", event => {
+      if (event.isComposing || event.code === 'Enter') {
+        window.location.href = `/anuncio`;
+      }
+    });
+
+    const pesquisar = (tipo, pesquisa) => {
+        if(pesquisa == null)
+            pesquisa = document.getElementById('pesquisa').value;
+        window.location.href = `/anuncio?tipo=${tipo}&s=${pesquisa}`;
     }
 </script>

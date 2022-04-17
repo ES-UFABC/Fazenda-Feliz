@@ -11,11 +11,14 @@ namespace FazendaFeliz.ApplicationCore.Business
         public string Categoria { get; set; }
         public double Preco { get; set; }
         public string Descricao { get; set; }
+        public Boolean Oculto { get; set; }
         public string Imagem_Base64 { get; set; }
     }
 
-    public class AnuncioComFavorito : Anuncio
+    public class AnuncioCompleto
     {
+        public Anuncio Anuncio { get; set; }
+        public Usuario Produtor { get; set; }
         public Boolean Favorito { get; set; }
     }
 }

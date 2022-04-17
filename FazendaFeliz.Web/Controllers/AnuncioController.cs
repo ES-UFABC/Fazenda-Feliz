@@ -35,7 +35,7 @@ namespace FazendaFeliz.Web.Controllers
             usuarioLogado = _usuarioRepository.ObterPorEmail(_identityService.ObterEmail());
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string tipo, string s)
         {
             if (_identityService.ObterRole() == "Produtor")
             {
@@ -44,7 +44,7 @@ namespace FazendaFeliz.Web.Controllers
             }
             else
             {
-                List <AnuncioComFavorito > anuncios = await _anuncioRepository.ObterTodosComFavorito(usuarioLogado.Id);
+                List<AnuncioCompleto> anuncios = await _anuncioRepository.ObterTodosCompletos(usuarioLogado.Id, tipo, s);
                 return View("/Views/Anuncio/AnunciosConsumidor.cshtml", anuncios);
             }
         }
@@ -67,6 +67,14 @@ namespace FazendaFeliz.Web.Controllers
         public async Task<IActionResult> OcultarAnuncio([FromBody]int idAnuncio)
         {
             var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
+            if(anuncio.Oculto)
+            {
+                anuncio.Oculto = false;
+            }
+            else
+            {
+                anuncio.Oculto = true;
+            }
             await _anuncioRepository.SaveChanges();
 
             //return View();
