@@ -14,21 +14,22 @@ namespace FazendaFeliz.Infrastructure.Data.Repositories
     {
         public AnuncioRepository(AppDbContext context) : base(context) { }
 
-        public Task<List<AnuncioComFavorito>> ObterTodosComFavorito(int id_usuario)
+        public Task<List<AnuncioCompleto>> ObterTodosCompletos(int id_usuario, string tipo, string s)
         {
             var anunciosFavoritos =
                 from a in _Context.Anuncios
+                join u in _Context.Usuarios
+                    on a.Id_Usuario equals u.Id
+                where 
+                    (tipo != "produto" || a.Categoria.ToLower().Contains(s)) &&
+                    (tipo != "anuncios" || a.Titulo.ToLower().Contains(s)) &&
+                    (tipo != "produtores" || u.Nome.ToLower().Contains(s)) &&
+                    (tipo != "localizações" || a.Localizacao.ToLower().Contains(s))
                 let blnFavorito = _Context.Favoritos.Where(f => f.Id_Anuncio == a.Id && f.Id_Usuario == id_usuario).Any()
-                select new AnuncioComFavorito()
+                select new AnuncioCompleto()
                 {
-                    Id = a.Id,
-                    Id_Usuario = a.Id_Usuario,
-                    Titulo = a.Titulo,
-                    Localizacao = a.Localizacao,
-                    Categoria = a.Categoria,
-                    Preco = a.Preco,
-                    Descricao = a.Descricao,
-                    Imagem_Base64 = a.Imagem_Base64,
+                    Anuncio = a,
+                    Produtor = u,
                     Favorito = blnFavorito
                 };
 
