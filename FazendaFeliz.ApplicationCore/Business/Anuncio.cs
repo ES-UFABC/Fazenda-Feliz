@@ -11,6 +11,7 @@ namespace FazendaFeliz.ApplicationCore.Business
         public string Categoria { get; set; }
         public double Preco { get; set; }
         public string Descricao { get; set; }
+        public Boolean Oculto { get; set; }
         public string Imagem_Base64 { get; set; }
     }
 
