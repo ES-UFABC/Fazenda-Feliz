@@ -162,39 +162,42 @@
     <div class="anuncios-wrapper row">
     @foreach(var anuncio in Model)
     {
-        <section class="col-12 col-lg-4 px-2">
-            <div class="anuncio">
-                <h4>@anuncio.Anuncio.Titulo</h4>
-                <div class="_card-body">
-                    <div class='produtor'>
-                        <img src="@anuncio.Produtor.Foto">
-                        <p>@anuncio.Produtor.Nome</p>
-                    </div>
-                    <div class="info">
-                        <div>
-                            <label><i class="fa-solid fa-location-dot mr-2"></i>Localização</label>
-                            <p>@anuncio.Anuncio.Localizacao</p>
+            @if (!anuncio.Anuncio.Oculto)
+            {
+                <section class="col-12 col-lg-4 px-2">
+                    <div class="anuncio">
+                        <h4>@anuncio.Anuncio.Titulo</h4>
+                        <div class="_card-body">
+                            <div class='produtor'>
+                                <img src="@anuncio.Produtor.Foto">
+                                <p>@anuncio.Produtor.Nome</p>
+                            </div>
+                            <div class="info">
+                                <div>
+                                    <label><i class="fa-solid fa-location-dot mr-2"></i>Localização</label>
+                                    <p>@anuncio.Anuncio.Localizacao</p>
+                                </div>
+                                <div>
+                                    <label><i class="fa-solid fa-money-bill-1-wave mr-2"></i>Preço</label>
+                                    <p>@anuncio.Anuncio.Preco</p>
+                                </div>
+                            </div>
+                            <img src="@anuncio.Anuncio.Imagem_Base64"/>
                         </div>
-                        <div>
-                            <label><i class="fa-solid fa-money-bill-1-wave mr-2"></i>Preço</label>
-                            <p>@anuncio.Anuncio.Preco</p>
-                        </div>
-                    </div>
-                    <img src="@anuncio.Anuncio.Imagem_Base64"/>
+                        <div class="edit-anuncio">
+                            @if (anuncio.Favorito)
+                            {
+                                <i class="fa-solid fa-heart mr-2" style="color:red;" onclick="favoritar(@anuncio.Anuncio.Id)"></i>
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-heart mr-2" onclick="favoritar(@anuncio.Anuncio.Id)"></i>
+                            }
+                            <i class="fa-solid fa-bullhorn" onclick="reclamar(@anuncio.Anuncio.Id)"></i>
                 </div>
-            <div class="edit-anuncio">
-                    @if (anuncio.Favorito)
-                    {
-                        <i class="fa-solid fa-heart mr-2" style="color:red;" onclick="favoritar(@anuncio.Anuncio.Id)"></i>
-                    }
-                    else
-                    {
-                        <i class="fa-solid fa-heart mr-2" onclick="favoritar(@anuncio.Anuncio.Id)"></i>  
-                    }
-                    <i class="fa-solid fa-bullhorn" onclick="reclamar(@anuncio.Anuncio.Id)"></i>
             </div>
-        </div>
-        </section>
+            </section>
+        }
     }
     </div>
 </div>

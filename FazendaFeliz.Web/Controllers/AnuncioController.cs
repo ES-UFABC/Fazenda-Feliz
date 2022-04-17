@@ -67,6 +67,14 @@ namespace FazendaFeliz.Web.Controllers
         public async Task<IActionResult> OcultarAnuncio([FromBody]int idAnuncio)
         {
             var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
+            if(anuncio.Oculto)
+            {
+                anuncio.Oculto = false;
+            }
+            else
+            {
+                anuncio.Oculto = true;
+            }
             await _anuncioRepository.SaveChanges();
 
             //return View();
