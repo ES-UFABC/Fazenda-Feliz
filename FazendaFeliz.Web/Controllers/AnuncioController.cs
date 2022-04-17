@@ -113,8 +113,11 @@ namespace FazendaFeliz.Web.Controllers
         [HttpGet("/anuncio/descricao/{idAnuncio}")]
         public async Task<IActionResult> DescricaoAnuncio(int idAnuncio)
         {
-            var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
-            return View("DescricaoAnuncio", anuncio);
+            Descricao descricao = new Descricao();
+            descricao.Anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
+            descricao.Usuario = await _usuarioRepository.ObterPorId(descricao.Anuncio.Id_Usuario);
+            descricao.Reclamacao = await _reclamacaoRepository.ObterPorId(idAnuncio);
+            return View("DescricaoAnuncio", descricao);
         }
 
         [HttpPost("/anuncio/reclamar/{idAnuncio}")]
