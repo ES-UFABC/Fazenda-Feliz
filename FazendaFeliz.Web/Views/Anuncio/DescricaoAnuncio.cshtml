@@ -1,0 +1,120 @@
+﻿@model FazendaFeliz.ApplicationCore.Business.Anuncio; 
+@{
+	ViewData["Title"] = "Descrição do Anuncio";
+}
+
+<div>
+    <h3 class="page-title">Descrição do Anuncio</h3>
+    <section class="col-32 col-lg-32 px-2">
+        <div class="anuncio">
+            <h4>@Model.Titulo</h4>
+            <div class="_card-body">
+                    <div class="info">
+                        <div>
+                        <label><i class="fa-solid fa-location-dot mr-2"></i>Localização</label>
+                        <p>@Model.Localizacao</p>
+                    </div>
+                    <div>
+                        <label><i class="fa-solid fa-money-bill-1-wave mr-2"></i>Preço</label>
+                        <p>@Model.Preco</p>
+                    </div>
+                    <div>
+                        <label><i></i>Descrição</label>
+                        <p>@Model.Descricao</p>
+                    </div>
+                </div>
+                <img src="@Model.Imagem_Base64"/>
+            </div>
+
+        </div>
+    </section>
+    
+    <section>
+
+    </section>
+</div>
+
+<style>
+    .mr-2 {
+        margin-right: 10px;
+    }
+    .anuncio {
+        border-radius: 10px;
+        border: solid 2px var(--clr-green);
+        padding: 1rem;
+        box-shadow: 0 0 5px 3px #0002;
+        margin: 1rem 0;
+        position: relative;
+    }
+
+    .anuncio h4 {
+        font-weight:bold;
+        text-align: center;
+    }
+
+    .info label{
+        font-weight: bold;
+    }
+
+    img {
+        width: 160px;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin: auto 0;
+    }
+
+    ._card-body {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+
+<script>
+    let form = {
+        titulo: document.getElementById('titulo'),
+        nome: document.getElementById('nome'),
+        descricao: document.getElementById('descricao'),
+        imagem_base64: "",
+    }
+
+    const salvarReclamacao = () => {
+        if(form.titulo.value == "")
+            return toastr.error("Por favor preencher o título da reclamação");
+
+        if(form.nome.value == "")
+            return toastr.error("Por favor preencher seu nome");
+
+        if(form.descricao.value == "")
+            return toastr.error("Por favor preencher a descrição do anúncio");
+
+        axios.post('', 
+          {
+            id_anuncio: @Model.Id,
+            titulo: form.titulo.value,
+            nome: form.nome.value,
+            descricao: form.descricao.value,
+            imagem_base64: form.imagem_base64
+          })
+        .then(function (response) {
+            if(response.status == 200) {
+                toastr.success("Reclamação cadastrada com sucesso!");
+                window.setTimeout(() => location.href = "/anuncio", 500);
+            }
+            console.log(response);
+        })
+        .catch(function (error) {
+            toastr.error("Erro ao cadastrar reclamação!");
+            console.log(error);
+        });
+    }
+
+    async function loadImage(input){
+        let file = input.files[0];
+        let base64 = await toBase64(file);
+        form.imagem_base64 = base64;
+        document.getElementById("uploadedImg").src = base64;
+        document.getElementById("uploadedImg").style.display = "block";
+        document.getElementById("imgIcon").style.display = "none";
+    }
+</script>
