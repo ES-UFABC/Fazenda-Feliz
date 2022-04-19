@@ -124,7 +124,7 @@ namespace FazendaFeliz.Web.Controllers
             Descricao descricao = new Descricao();
             descricao.Anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
             descricao.Usuario = await _usuarioRepository.ObterPorId(descricao.Anuncio.Id_Usuario);
-            descricao.Reclamacao = await _reclamacaoRepository.
+            descricao.Reclamacao = await _reclamacaoRepository.ObterReclamacoesPorIdAnuncio(descricao.Anuncio.Id);
             return View("DescricaoAnuncio", descricao);
         }
 

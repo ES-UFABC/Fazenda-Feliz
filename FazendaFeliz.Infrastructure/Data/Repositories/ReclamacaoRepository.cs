@@ -14,5 +14,10 @@ namespace FazendaFeliz.Infrastructure.Data.Repositories
     {
         public ReclamacaoRepository(AppDbContext context) : base(context) { }
 
+        public async Task<List<Reclamacao>> ObterReclamacoesPorIdAnuncio(int idAnuncio)
+        {
+            return await _Context.Reclamacoes.Where(t=> t.Id_Anuncio == idAnuncio).ToListAsync();
+        }
+
     }
 }
