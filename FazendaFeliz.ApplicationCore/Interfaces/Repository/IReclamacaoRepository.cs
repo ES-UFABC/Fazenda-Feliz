@@ -8,6 +8,6 @@ namespace FazendaFeliz.ApplicationCore.Interfaces.Repository
 {
     public interface IReclamacaoRepository : IRepository<Reclamacao>
     {
-        public Task<List<Reclamacao>> ObterReclamacoesPorIdAnuncio(int idAnuncio);
+        public Task<List<Reclamacao>> ObterReclamacoesProdutor(int id_usuario);
     }
 }
