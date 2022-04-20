@@ -111,22 +111,5 @@ namespace FazendaFeliz.Web.Controllers
             return Json(1);
         }
 
-        [HttpGet("/anuncio/reclamar/{idAnuncio}")]
-        public async Task<IActionResult> ReclamarAnuncio(int idAnuncio)
-        {
-            var anuncio = await _anuncioRepository.ObterPorId(idAnuncio);
-            return View("ReclamarAnuncio", anuncio);
-        }
-
-        [HttpPost("/anuncio/reclamar/{idAnuncio}")]
-        public async Task<IActionResult> CriarReclamacao([FromBody] Reclamacao reclamacaoData)
-        {
-            //inserir relação MxN
-
-            reclamacaoData.Id_Usuario = usuarioLogado.Id;
-            _reclamacaoRepository.Add(reclamacaoData);
-            await _reclamacaoRepository.SaveChanges();
-            return Json(1);
-        }
     }
 }

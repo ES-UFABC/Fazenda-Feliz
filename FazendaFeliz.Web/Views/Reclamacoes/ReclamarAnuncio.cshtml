@@ -12,11 +12,7 @@
             <input type="text" class="form-control" id="titulo" placeholder="">
         </div>
         <div class="form-group">
-            <label for="localizacao">Nome</label>
-            <input type="text" class="form-control" id="nome" placeholder="">
-        </div>
-        <div class="form-group">
-            <label for="descricao">Descrição</label>
+            <label for="descricao">Descrição do ocorrido</label>
             <textarea class="form-control" id="descricao" placeholder="" rows=4></textarea>
         </div>
         <label id="anexador" for="img_anuncio">
@@ -64,7 +60,6 @@
 <script>
     let form = {
         titulo: document.getElementById('titulo'),
-        nome: document.getElementById('nome'),
         descricao: document.getElementById('descricao'),
         imagem_base64: "",
     }
@@ -73,17 +68,14 @@
         if(form.titulo.value == "")
             return toastr.error("Por favor preencher o título da reclamação");
 
-        if(form.nome.value == "")
-            return toastr.error("Por favor preencher seu nome");
-
         if(form.descricao.value == "")
             return toastr.error("Por favor preencher a descrição do anúncio");
 
         axios.post('', 
           {
             id_anuncio: @Model.Id,
+            id_produtor: @Model.Id_Usuario,
             titulo: form.titulo.value,
-            nome: form.nome.value,
             descricao: form.descricao.value,
             imagem_base64: form.imagem_base64
           })
