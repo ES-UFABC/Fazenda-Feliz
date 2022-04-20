@@ -181,6 +181,9 @@
                                     <label><i class="fa-solid fa-money-bill-1-wave mr-2"></i>Preço</label>
                                     <p>@anuncio.Anuncio.Preco</p>
                                 </div>
+                                <div>
+                                    <label><i class="fa-solid fa-plus mr-2"  style="cursor:pointer;" onclick=descricao(@anuncio.Anuncio.Id)></i></label>
+                                    </div>
                             </div>
                             <img src="@anuncio.Anuncio.Imagem_Base64"/>
                         </div>
@@ -206,8 +209,11 @@
     const reclamar = (idAnuncio) => {
         window.location.href = "/anuncio/reclamar/"+idAnuncio;
     }
+    const descricao = (idAnuncio) => {
+        window.location.href = "/anuncio/descricao/"+idAnuncio
+    }
 
-     const favoritar = (idAnuncio) => {
+    const favoritar = (idAnuncio) => {
         axios({ method: 'post', url: '/favoritos/favoritar', data: parseInt(idAnuncio), headers: {
           'Content-Type': 'application/json; charset=utf-8'
         }})

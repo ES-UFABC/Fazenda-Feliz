@@ -1,0 +1,91 @@
+﻿@model FazendaFeliz.ApplicationCore.Business.Descricao; 
+@{
+	ViewData["Title"] = "Descrição do Anuncio";
+}
+
+<div>
+    <h3 class="page-title">Descrição do Anuncio</h3>
+    <section class="col-32 col-lg-32 px-2">
+        <div class="anuncio">
+            <h4>@Model.Anuncio.Titulo</h4>
+            <div class="_card-body">
+                    <div class="info">
+                        <div>
+                        <label><i class="fa-solid fa-location-dot mr-2"></i>Localização</label>
+                        <p>@Model.Anuncio.Localizacao</p>
+                    </div>
+                    <div>
+                        <label><i class="fa-solid fa-money-bill-1-wave mr-2"></i>Preço</label>
+                        <p>@Model.Anuncio.Preco</p>
+                    </div>
+                    <div>
+                        <label><i></i>Descrição</label>
+                        <p>@Model.Anuncio.Descricao</p>
+                    </div>
+                     <div> 
+                         <label><i class="fa-solid fa-user mr-2"></i>Produtor</label>   
+                            <p>@Model.Usuario.Nome</p>
+                     </div>
+                     <div>
+                         <label><i class="fa-solid fa-phone mr-2"></i>Telefone</label>
+                         <p>@Model.Usuario.Telefone</p>
+                     </div>
+                     <div>
+                         <label><i class="fa-solid fa-at mr-2"></i>E-mail</label>
+                         <p>@Model.Usuario.Email</p>
+                     </div>
+                 </div>
+                <img src="@Model.Anuncio.Imagem_Base64"/>
+
+            </div>
+
+        </div>
+    </section>
+    
+    <section>
+
+    </section>
+</div>
+
+<style>
+    .container{
+    }
+
+    .mr-2 {
+        margin-right: 10px;
+    }
+    .anuncio {
+        border-radius: 10px;
+        border: solid 2px var(--clr-green);
+        padding: 1rem;
+        box-shadow: 0 0 5px 3px #0002;
+        margin: 1rem 0;
+        position: relative;
+    }
+
+    .anuncio h4 {
+        font-weight:bold;
+        text-align: center;
+    }
+
+    .info label{
+        font-weight: bold;
+    }
+
+    img {
+        width: 160px;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin: auto 0;
+    }
+
+    ._card-body {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+
+<script>
+
+</script>
