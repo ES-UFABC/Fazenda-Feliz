@@ -5,7 +5,13 @@
 }
 
 <div class="content">
+     
     <h3 class="page-title">Meu Perfil</h3>
+    @if(@Model.Tipo == "Produtor" ){
+    <div>
+        <button type="button" class="btn btn-red my-2 mx-auto mb-1" onclick="reclamacoes();">Reclamações<i class="fas fa-bullhorn" style="margin-left: .5rem;"></i></button>
+    </div>
+    }
     <label id="anexador" for="img_anuncio">
         <input id="img_anuncio" hidden type="file" multiple="false" accept="image/*" onchange="loadImage(this);"/>
         <img id="uploadedImg" src="@Model.Foto"/>
@@ -145,6 +151,10 @@
             toastr.error("Erro ao cadastrar anúncio!");
             console.log(error);
         });
+    }
+
+    const reclamacoes = () => {
+        window.location.href = "/reclamacoes";
     }
 
     async function loadImage(input){
