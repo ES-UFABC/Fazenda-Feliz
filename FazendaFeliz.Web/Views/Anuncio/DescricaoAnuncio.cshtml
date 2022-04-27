@@ -36,10 +36,26 @@
                      </div>
                  </div>
                 <img src="@Model.Anuncio.Imagem_Base64"/>
-
             </div>
 
-        </div>
+            <div class="anuncio">
+                <h4>Reclamações do Produtor</h4>
+                <div class="_card-body">
+                    <div class="info">
+                        @foreach(var reclamacao in Model.Reclamacao)
+                        {
+                            <div>
+                                <h5>@reclamacao.Titulo</h5>
+                                <p>@reclamacao.Descricao</p>
+                                @if(@reclamacao.Imagem_Base64 != "")
+                                {
+                                    <img src="@reclamacao.Imagem_Base64"></img>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
     </section>
     
     <section>

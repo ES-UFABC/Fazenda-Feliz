@@ -183,7 +183,7 @@
                                 </div>
                                 <div>
                                     <label><i class="fa-solid fa-plus mr-2"  style="cursor:pointer;" onclick=descricao(@anuncio.Anuncio.Id)></i></label>
-                                    </div>
+                                </div>
                             </div>
                             <img src="@anuncio.Anuncio.Imagem_Base64"/>
                         </div>
@@ -209,6 +209,7 @@
     const reclamar = (idAnuncio) => {
         window.location.href = "/anuncio/reclamar/"+idAnuncio;
     }
+
     const descricao = (idAnuncio) => {
         window.location.href = "/anuncio/descricao/"+idAnuncio
     }
