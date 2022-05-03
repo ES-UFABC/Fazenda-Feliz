@@ -13,11 +13,14 @@ namespace FazendaFeliz.Web.Controllers
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IIdentityService _identityService;
+        public readonly IReclamacaoRepository _reclamacaoRepository;
 
-        public UsuarioController(IUsuarioRepository usuarioRepository, IIdentityService identityService)
+
+        public UsuarioController(IUsuarioRepository usuarioRepository, IReclamacaoRepository reclamacaoRepository, IIdentityService identityService)
         {
             _usuarioRepository = usuarioRepository;
             _identityService = identityService;
+            _reclamacaoRepository = reclamacaoRepository;
         }
 
         [HttpGet("/usuario/novo")]
@@ -77,6 +80,21 @@ namespace FazendaFeliz.Web.Controllers
             var emailUsuario = _identityService.ObterEmail();
             var usuario = _usuarioRepository.ObterPorEmail(emailUsuario);
             return View("/Views/Usuario/Perfil.cshtml", usuario);
+        }
+
+        [HttpGet("/produtor/{idUser}")]
+        public async Task<IActionResult> Perfil(int idUser)
+        {
+            var produtor = new ProdutorDTO();
+            produtor.Usuario = await _usuarioRepository.ObterPorId(idUser);
+            
+            if (produtor.Usuario.Tipo != "Produtor")
+            {
+                return Redirect("/anuncio");
+            }
+
+            produtor.Reclamacaos = await _reclamacaoRepository.ObterReclamacoesProdutor(produtor.Usuario.Id);
+            return View("/Views/Usuario/Produtor.cshtml", produtor);
         }
 
         [Authorize]

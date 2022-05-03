@@ -196,10 +196,11 @@
                             {
                                 <i class="fa-solid fa-heart mr-2" onclick="favoritar(@anuncio.Anuncio.Id)"></i>
                             }
-                            <i class="fa-solid fa-bullhorn" onclick="reclamar(@anuncio.Anuncio.Id)"></i>
-                </div>
-            </div>
-            </section>
+                            <i class="fa-solid fa-bullhorn mr-2" onclick="reclamar(@anuncio.Anuncio.Id)"></i>
+                            <i class="fa-solid fa-user" onclick="produtor(@anuncio.Produtor.Id)"></i>
+                        </div>
+
+                </section>
         }
     }
     </div>
@@ -213,7 +214,10 @@
     const descricao = (idAnuncio) => {
         window.location.href = "/anuncio/descricao/"+idAnuncio
     }
-
+    
+    const produtor = (idProdutor) => {
+        window.location.href = "/produtor/"+idProdutor;
+    }
     const favoritar = (idAnuncio) => {
         axios({ method: 'post', url: '/favoritos/favoritar', data: parseInt(idAnuncio), headers: {
           'Content-Type': 'application/json; charset=utf-8'
