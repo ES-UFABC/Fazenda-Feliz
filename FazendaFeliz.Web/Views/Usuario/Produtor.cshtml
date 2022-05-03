@@ -1,48 +1,36 @@
-﻿@model FazendaFeliz.ApplicationCore.Business.Descricao; 
+﻿@model FazendaFeliz.ApplicationCore.Business.ProdutorDTO; 
 @{
-	ViewData["Title"] = "Descrição do Anuncio";
+	ViewData["Title"] = "Descrição do Produtor";
 }
 
 <div>
-    <h3 class="page-title">Descrição do Anuncio</h3>
+    <h3 class="page-title">Descrição do Produtor</h3>
     <section class="col-32 col-lg-32 px-2">
-        <div class="anuncio">
-            <h4>@Model.Anuncio.Titulo</h4>
+        <div class="produtor">
+            <h4>Produtor</h4>
             <div class="_card-body">
                     <div class="info">
                         <div>
-                        <label><i class="fa-solid fa-location-dot mr-2"></i>Localização</label>
-                        <p>@Model.Anuncio.Localizacao</p>
+                        <label><i class="fa-solid fa-at mr-2"></i>E-mail</label>
+                        <p>@Model.Usuario.Email</p>
                     </div>
                     <div>
-                        <label><i class="fa-solid fa-money-bill-1-wave mr-2"></i>Preço</label>
-                        <p>@Model.Anuncio.Preco</p>
-                    </div>
-                    <div>
-                        <label><i></i>Descrição</label>
-                        <p>@Model.Anuncio.Descricao</p>
+                        <label><i class="fa-solid fa-phone mr-2"></i>Telefone</label>
+                        <p>@Model.Usuario.Telefone</p>
                     </div>
                      <div> 
-                         <label><i class="fa-solid fa-user mr-2"></i>Produtor</label>   
+                         <label><i class="fa-solid fa-user mr-2"></i>Nome</label>   
                             <p>@Model.Usuario.Nome</p>
                      </div>
-                     <div>
-                         <label><i class="fa-solid fa-phone mr-2"></i>Telefone</label>
-                         <p>@Model.Usuario.Telefone</p>
-                     </div>
-                     <div>
-                         <label><i class="fa-solid fa-at mr-2"></i>E-mail</label>
-                         <p>@Model.Usuario.Email</p>
-                     </div>
                  </div>
-                <img src="@Model.Anuncio.Imagem_Base64"/>
+                <img src="@Model.Usuario.Foto"/>
             </div>
 
             <div class="anuncio">
                 <h4>Reclamações do Produtor</h4>
                 <div class="_card-body">
                     <div class="info">
-                        @foreach(var reclamacao in Model.Reclamacao)
+                        @foreach(var reclamacao in Model.Reclamacaos)
                         {
                             <div>
                                 <h5>@reclamacao.Titulo</h5>
@@ -71,7 +59,7 @@
     .mr-2 {
         margin-right: 10px;
     }
-    .anuncio {
+    .produtor {
         border-radius: 10px;
         border: solid 2px var(--clr-green);
         padding: 1rem;
@@ -80,7 +68,7 @@
         position: relative;
     }
 
-    .anuncio h4 {
+    .produtor h4 {
         font-weight:bold;
         text-align: center;
     }
