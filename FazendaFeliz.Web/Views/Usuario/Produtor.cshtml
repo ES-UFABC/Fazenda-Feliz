@@ -29,6 +29,14 @@
             <div class="anuncio">
                 <h4>Reclamações do Produtor</h4>
                 <div class="_card-body">
+                    @if (Model.Favorito)
+                    {
+                        <i class="fa-solid fa-heart mr-2" style="color:red;" onclick="favoritar(@Model.Usuario.Id)"></i>
+                    }
+                    else
+                    {
+                        <i class="fa-solid fa-heart mr-2" onclick="favoritar(@Model.Usuario.Id)"></i>
+                    }
                     <div class="info">
                         @foreach(var reclamacao in Model.Reclamacaos)
                         {
@@ -39,6 +47,7 @@
                                 {
                                     <img src="@reclamacao.Imagem_Base64"></img>
                                 }
+                                
                                 <br>
                             </div>
                         }
@@ -53,9 +62,6 @@
 </div>
 
 <style>
-    .container{
-    }
-
     .mr-2 {
         margin-right: 10px;
     }
@@ -78,8 +84,8 @@
     }
 
     img {
-        width: 160px;
-        height: 160px;
+        width: 240px;
+        height: 240px;
         object-fit: cover;
         border-radius: 10px;
         margin: auto 0;
@@ -92,5 +98,20 @@
 </style>
 
 <script>
-
+    const favoritar = (idUsuario) => {
+        axios({ method: 'post', url: '/favoritos/favoritarProdutor', data: parseInt(idUsuario), headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }})
+        .then(function (response) {
+            if(response.status == 200) {
+                toastr.success("Produtor favoritado com sucesso!");
+                window.location.reload();
+            }
+            console.log(response);
+        })
+        .catch(function (error) {
+            toastr.error("Erro ao favoritar produtor");
+            console.log(error);
+        });
+    }
 </script>

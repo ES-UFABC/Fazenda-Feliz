@@ -26,9 +26,26 @@ namespace FazendaFeliz.Infrastructure.Data.Repositories
             return await anunciosFavoritos.AsNoTracking().ToListAsync();
         }
 
+        public async Task<List<Usuario>> ObterProdutoresFavoritosPorUsuario(int id_usuario)
+        {
+            var anunciosFavoritos =
+                from f in _Context.Favoritos
+                join a in _Context.Usuarios
+                    on f.Id_Produtor equals a.Id
+                where f.Id_Usuario == id_usuario
+                select a;
+
+            return await anunciosFavoritos.AsNoTracking().ToListAsync();
+        }
+
         public async Task<Favorito> ObterPorUsuarioAnuncio(int id_usuario, int id_anuncio)
         {
             return await _Context.Favoritos.Where(f => f.Id_Anuncio == id_anuncio && f.Id_Usuario == id_usuario).FirstOrDefaultAsync();
+        }
+
+        public async Task<Favorito> ObterPorUsuarioProdutor(int id_usuario, int id_produtor)
+        {
+            return await _Context.Favoritos.Where(f => f.Id_Produtor == id_produtor && f.Id_Usuario == id_usuario).FirstOrDefaultAsync();
         }
     }
 }

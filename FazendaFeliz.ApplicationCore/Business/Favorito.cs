@@ -6,7 +6,11 @@ namespace FazendaFeliz.ApplicationCore.Business
     {
         [ForeignKey("Usuario")]
         public int Id_Usuario { get; set; }
+        
         [ForeignKey("Anuncio")]
         public int Id_Anuncio { get; set; }
+        
+        [ForeignKey("Usuario")]
+        public int Id_Produtor { get; set; }
     }
 }

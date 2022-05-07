@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace FazendaFeliz.ApplicationCore.Business
 {
-    public class ProdutorDTO
+    public class FavoritosDTO
     {
-        public Usuario Usuario { get; set; }
+        public List<Usuario> Usuarios { get; set; }
 
-        public List<Reclamacao> Reclamacaos { get; set; }
-
-        public bool Favorito { get; set; }
+        public List<Anuncio> Anuncios { get; set;}
     }
 }
