@@ -37,8 +37,10 @@ namespace FazendaFeliz.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var anuncios = await _favoritoRepository.ObterAnunciosFavoritosPorUsuario(usuarioLogado.Id);
-            return View("/Views/Favoritos/AnunciosFavoritos.cshtml", anuncios);
+            var favoritos = new FavoritosDTO();
+            favoritos.Anuncios = await _favoritoRepository.ObterAnunciosFavoritosPorUsuario(usuarioLogado.Id);
+            favoritos.Usuarios = await _favoritoRepository.ObterProdutoresFavoritosPorUsuario(usuarioLogado.Id);
+            return View("/Views/Favoritos/AnunciosFavoritos.cshtml", favoritos);
         }
 
 
@@ -46,6 +48,7 @@ namespace FazendaFeliz.Web.Controllers
         public async Task<IActionResult> FavoritarAnuncio([FromBody] int idAnuncio)
         {
             var favorito = await _favoritoRepository.ObterPorUsuarioAnuncio(usuarioLogado.Id, idAnuncio);
+            
             if(favorito is not null)
             {
                 await _favoritoRepository.Remover(favorito);
@@ -55,6 +58,25 @@ namespace FazendaFeliz.Web.Controllers
             await _favoritoRepository.Adicionar(new Favorito()
             {
                 Id_Anuncio = idAnuncio,
+                Id_Usuario = usuarioLogado.Id,
+            });
+
+            return Json(1);
+        }
+
+        [HttpPost("/favoritos/favoritarProdutor")]
+        public async Task<IActionResult> FavoritarProdutor([FromBody] int idProdutor)
+        {
+            var favorito = await _favoritoRepository.ObterPorUsuarioProdutor(usuarioLogado.Id, idProdutor);
+            if (favorito is not null)
+            {
+                await _favoritoRepository.Remover(favorito);
+                return Json(1);
+            }
+
+            await _favoritoRepository.Adicionar(new Favorito()
+            {
+                Id_Produtor = idProdutor,
                 Id_Usuario = usuarioLogado.Id
             });
 

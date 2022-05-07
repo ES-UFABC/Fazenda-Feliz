@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.Filters;
+
 
 namespace FazendaFeliz.Web.Controllers
 {
@@ -14,13 +16,22 @@ namespace FazendaFeliz.Web.Controllers
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IIdentityService _identityService;
         public readonly IReclamacaoRepository _reclamacaoRepository;
+        public readonly IFavoritoRepository _favoritoRepository;
+        public Usuario usuarioLogado;
 
 
-        public UsuarioController(IUsuarioRepository usuarioRepository, IReclamacaoRepository reclamacaoRepository, IIdentityService identityService)
+        public UsuarioController(IUsuarioRepository usuarioRepository, IReclamacaoRepository reclamacaoRepository, IIdentityService identityService, IFavoritoRepository favoritoRepository)
         {
             _usuarioRepository = usuarioRepository;
             _identityService = identityService;
             _reclamacaoRepository = reclamacaoRepository;
+            _favoritoRepository = favoritoRepository;
+        }
+
+        [NonAction]
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            usuarioLogado = _usuarioRepository.ObterPorEmail(_identityService.ObterEmail());
         }
 
         [HttpGet("/usuario/novo")]
@@ -94,6 +105,7 @@ namespace FazendaFeliz.Web.Controllers
             }
 
             produtor.Reclamacaos = await _reclamacaoRepository.ObterReclamacoesProdutor(produtor.Usuario.Id);
+            produtor.Favorito = await _favoritoRepository.ObterPorUsuarioProdutor(usuarioLogado.Id, idUser) != null ? true : false;
             return View("/Views/Usuario/Produtor.cshtml", produtor);
         }
 
