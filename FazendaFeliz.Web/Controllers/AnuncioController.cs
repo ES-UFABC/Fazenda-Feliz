@@ -19,14 +19,16 @@ namespace FazendaFeliz.Web.Controllers
         public readonly IAnuncioRepository _anuncioRepository;
         public readonly IIdentityService _identityService;
         public readonly IReclamacaoRepository _reclamacaoRepository;
+        public readonly IFavoritoRepository _favoritoRepository;
         public Usuario usuarioLogado;
 
-        public AnuncioController(IUsuarioRepository usuarioRepository, IAnuncioRepository anuncioRepository, IReclamacaoRepository reclamacaoRepository, IIdentityService identityService)
+        public AnuncioController(IUsuarioRepository usuarioRepository, IAnuncioRepository anuncioRepository, IReclamacaoRepository reclamacaoRepository, IIdentityService identityService, IFavoritoRepository favoritoRepository)
         {
             _usuarioRepository = usuarioRepository;
             _anuncioRepository = anuncioRepository;
             _reclamacaoRepository = reclamacaoRepository;
             _identityService = identityService;
+            _favoritoRepository = favoritoRepository;
         }
 
         [NonAction]
@@ -128,15 +130,31 @@ namespace FazendaFeliz.Web.Controllers
             return View("DescricaoAnuncio", descricao);
         }
 
-/*        [HttpPost("/anuncio/reclamar/{idAnuncio}")]
-        public async Task<IActionResult> CriarReclamacao([FromBody] Reclamacao reclamacaoData)
+        [HttpGet("/produtor/{idUser}")]
+        public async Task<IActionResult> Perfil(int idUser)
         {
-            //inserir relação MxN
+            var produtor = new ProdutorDTO();
+            produtor.Usuario = await _usuarioRepository.ObterPorId(idUser);
 
-            reclamacaoData.Id_Usuario = usuarioLogado.Id;
-            _reclamacaoRepository.Add(reclamacaoData);
-            await _reclamacaoRepository.SaveChanges();
-            return Json(1);
-        }*/
+            if (produtor.Usuario.Tipo != "Produtor")
+            {
+                return Redirect("/anuncio");
+            }
+
+            produtor.Reclamacaos = await _reclamacaoRepository.ObterReclamacoesProdutor(produtor.Usuario.Id);
+            produtor.Favorito = await _favoritoRepository.ObterPorUsuarioProdutor(usuarioLogado.Id, idUser) != null ? true : false;
+            return View("/Views/Usuario/Produtor.cshtml", produtor);
+        }
+
+        /*        [HttpPost("/anuncio/reclamar/{idAnuncio}")]
+                public async Task<IActionResult> CriarReclamacao([FromBody] Reclamacao reclamacaoData)
+                {
+                    //inserir relação MxN
+
+                    reclamacaoData.Id_Usuario = usuarioLogado.Id;
+                    _reclamacaoRepository.Add(reclamacaoData);
+                    await _reclamacaoRepository.SaveChanges();
+                    return Json(1);
+                }*/
     }
 }

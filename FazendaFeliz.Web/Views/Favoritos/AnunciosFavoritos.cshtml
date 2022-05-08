@@ -16,34 +16,34 @@
       </h2>
       <div class="content">
           <div class="anuncios-wrapper row">
-            @foreach(var anuncio in Model.Anuncios)
-            {
-                <section class="col-12 col-lg-4 px-2">
-                    <div class="anuncio">
-                        <h4>@anuncio.Titulo</h4>
-                        <div class="_card-body">
-                            <div class="info">
-                                <div>
-                                    <label><i class="fa-solid fa-location-dot mr-2"></i>Localização</label>
-                                    <p>@anuncio.Localizacao</p>
+              @foreach(var anuncio in Model.Anuncios)
+              {
+                    <section class="col-12 col-lg-4 px-2">
+                        <div class="anuncio">
+                            <h4>@anuncio.Titulo</h4>
+                            <div class="_card-body">
+                                <div class="info">
+                                    <div>
+                                        <label><i class="fa-solid fa-location-dot mr-2"></i>Localização</label>
+                                        <p>@anuncio.Localizacao</p>
+                                    </div>
+                                    <div>
+                                        <label><i class="fa-solid fa-money-bill-1-wave mr-2"></i>Preço</label>
+                                        <p>@anuncio.Preco</p>
+                                    </div>
+                                    <div>
+                                        <label><i class="fa-solid fa-plus mr-2"  style="cursor:pointer;" onclick=descricao(@anuncio.Id)></i></label>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label><i class="fa-solid fa-money-bill-1-wave mr-2"></i>Preço</label>
-                                    <p>@anuncio.Preco</p>
-                                </div>
-                                <div>
-                                    <label><i class="fa-solid fa-plus mr-2"  style="cursor:pointer;" onclick=descricao(@anuncio.Id)></i></label>
-                                </div>
+                                <img src="@anuncio.Imagem_Base64"/>
                             </div>
-                            <img src="@anuncio.Imagem_Base64"/>
+                        <div class="edit-anuncio">
+                                <i class="fa-solid fa-heart mr-2" style="color:red;" onclick="favoritar(@anuncio.Id)"></i>
+                                <i class="fa-solid fa-bullhorn" onclick="reclamar(@anuncio.Id)"></i>
                         </div>
-                    <div class="edit-anuncio">
-                            <i class="fa-solid fa-heart mr-2" style="color:red;" onclick="favoritar(@anuncio.Id)"></i>
-                            <i class="fa-solid fa-bullhorn" onclick="reclamar(@anuncio.Id)"></i>
-                    </div>
-                    </div>
-                </section>
-            }
+                        </div>
+                    </section>
+              }
             </div>
       </div>
     </section>
@@ -95,13 +95,13 @@
       display: none;
     }
 
-    .accordion .content {
+   .accordion .content {
       overflow: hidden;
       height: 0;
       transition: 0.5s;
     }
 
-    .accordion label {
+    .accordion .handle label {
         color: #fff;
         display: block;    
         padding: 8px 22px;
@@ -110,8 +110,8 @@
         background: #478c5c;
     }
         
-    .accordion label:hover,
-    .accordion label:focus {
+    .accordion .handle label:hover,
+    .accordion .habdle label:focus {
       background: #59981A;
     }
 

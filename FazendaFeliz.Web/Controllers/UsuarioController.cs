@@ -28,11 +28,6 @@ namespace FazendaFeliz.Web.Controllers
             _favoritoRepository = favoritoRepository;
         }
 
-        [NonAction]
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            usuarioLogado = _usuarioRepository.ObterPorEmail(_identityService.ObterEmail());
-        }
 
         [HttpGet("/usuario/novo")]
         public ActionResult Index()
@@ -93,21 +88,6 @@ namespace FazendaFeliz.Web.Controllers
             return View("/Views/Usuario/Perfil.cshtml", usuario);
         }
 
-        [HttpGet("/produtor/{idUser}")]
-        public async Task<IActionResult> Perfil(int idUser)
-        {
-            var produtor = new ProdutorDTO();
-            produtor.Usuario = await _usuarioRepository.ObterPorId(idUser);
-            
-            if (produtor.Usuario.Tipo != "Produtor")
-            {
-                return Redirect("/anuncio");
-            }
-
-            produtor.Reclamacaos = await _reclamacaoRepository.ObterReclamacoesProdutor(produtor.Usuario.Id);
-            produtor.Favorito = await _favoritoRepository.ObterPorUsuarioProdutor(usuarioLogado.Id, idUser) != null ? true : false;
-            return View("/Views/Usuario/Produtor.cshtml", produtor);
-        }
 
         [Authorize]
         [HttpPost("/perfil/editar")]
