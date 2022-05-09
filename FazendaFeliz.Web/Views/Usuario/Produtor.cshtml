@@ -13,42 +13,39 @@
                         <div>
                         <label><i class="fa-solid fa-at mr-2"></i>E-mail</label>
                         <p>@Model.Usuario.Email</p>
+                        </div>
+                        <div>
+                            <label><i class="fa-solid fa-phone mr-2"></i>Telefone</label>
+                            <p>@Model.Usuario.Telefone</p>
+                        </div>
+                        <div> 
+                             <label><i class="fa-solid fa-user mr-2"></i>Nome</label>   
+                                <p>@Model.Usuario.Nome</p>
+                        </div>
                     </div>
-                    <div>
-                        <label><i class="fa-solid fa-phone mr-2"></i>Telefone</label>
-                        <p>@Model.Usuario.Telefone</p>
-                    </div>
-                     <div> 
-                         <label><i class="fa-solid fa-user mr-2"></i>Nome</label>   
-                            <p>@Model.Usuario.Nome</p>
-                     </div>
-                 </div>
-                <img src="@Model.Usuario.Foto"/>
+                    <img src="@Model.Usuario.Foto"/>
             </div>
-
-            <div class="anuncio">
+             @if (Model.Favorito)
+             {
+                 <i class="fa-solid fa-heart mr-2" style="color:red;cursor:pointer;" onclick="favoritar(@Model.Usuario.Id)"></i>
+             }
+             else
+             {
+                 <i class="fa-solid fa-heart mr-2" style="cursor:pointer;"onclick="favoritar(@Model.Usuario.Id)"></i>
+             }
+            <div>
                 <h4>Reclamações do Produtor</h4>
                 <div class="_card-body">
-                    @if (Model.Favorito)
-                    {
-                        <i class="fa-solid fa-heart mr-2" style="color:red;" onclick="favoritar(@Model.Usuario.Id)"></i>
-                    }
-                    else
-                    {
-                        <i class="fa-solid fa-heart mr-2" onclick="favoritar(@Model.Usuario.Id)"></i>
-                    }
-                    <div class="info">
+                    <div class="container">
                         @foreach(var reclamacao in Model.Reclamacaos)
                         {
-                            <div>
+                            <div class="reclamacao">
                                 <h5>@reclamacao.Titulo</h5>
                                 <p>@reclamacao.Descricao</p>
                                 @if(@reclamacao.Imagem_Base64 != "")
                                 {
-                                    <img src="@reclamacao.Imagem_Base64"></img>
+                                    <img src="@reclamacao.Imagem_Base64">
                                 }
-                                
-                                <br>
                             </div>
                         }
                     </div>
@@ -62,6 +59,10 @@
 </div>
 
 <style>
+    .container{
+        box-sizing:border-box;
+        width:100%;
+    }
     .mr-2 {
         margin-right: 10px;
     }
@@ -83,7 +84,12 @@
         font-weight: bold;
     }
 
-    img {
+    ._card-body {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    ._card-body img {
         width: 240px;
         height: 240px;
         object-fit: cover;
@@ -91,10 +97,22 @@
         margin: auto 0;
     }
 
-    ._card-body {
-        display: flex;
-        justify-content: space-between;
+    .reclamacao {
+        border-radius: 10px;
+        padding: 1rem;
+        box-shadow: 0 0 5px 3px #0002;
+        margin: 1rem auto ;
+        position: relative;
     }
+
+    .reclamacao h4{
+        font-weight:bold;
+        text-align: center;
+    }
+
+    .reclamacao img{
+    }
+
 </style>
 
 <script>
