@@ -38,20 +38,19 @@
                 <img src="@Model.Anuncio.Imagem_Base64"/>
             </div>
 
-            <div class="anuncio">
+            <div>
                 <h4>Reclamações do Produtor</h4>
                 <div class="_card-body">
-                    <div class="info">
+                    <div class="container">
                         @foreach(var reclamacao in Model.Reclamacao)
                         {
-                            <div>
+                            <div class="reclamacao">
                                 <h5>@reclamacao.Titulo</h5>
                                 <p>@reclamacao.Descricao</p>
                                 @if(@reclamacao.Imagem_Base64 != "")
                                 {
-                                    <img src="@reclamacao.Imagem_Base64"></img>
+                                    <img src="@reclamacao.Imagem_Base64">
                                 }
-                                <br>
                             </div>
                         }
                     </div>
@@ -65,7 +64,9 @@
 </div>
 
 <style>
-    .container{
+     .container{
+        box-sizing:border-box;
+        width:100%;
     }
 
     .mr-2 {
@@ -101,6 +102,23 @@
         display: flex;
         justify-content: space-between;
     }
+
+    .reclamacao {
+        border-radius: 10px;
+        padding: 1rem;
+        box-shadow: 0 0 5px 3px #0002;
+        margin: 1rem auto ;
+        position: relative;
+    }
+
+    .reclamacao h4{
+        font-weight:bold;
+        text-align: center;
+    }
+
+    .reclamacao img{
+    }
+
 </style>
 
 <script>
